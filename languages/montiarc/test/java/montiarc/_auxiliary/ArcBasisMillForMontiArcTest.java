@@ -3,7 +3,7 @@ package montiarc._auxiliary;
 
 import arcbasis.ArcBasisMill;
 import com.google.common.base.Preconditions;
-import de.monticore.types.check.FullSynthesizeCompKindFromMCSimpleGenericTypes;
+import de.monticore.types.check.FullSynthesizeCompKindFromMCComponentTypes;
 import de.monticore.types.check.ISynthesizeComponent;
 import montiarc.MontiArcMill;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -19,8 +19,8 @@ public class ArcBasisMillForMontiArcTest {
 
   protected static Stream<Arguments> setupAndExpectedClassForScopesGenitorP2Provider() {
     return Stream.of(
-      Arguments.of(arcBasisMillSetup(), FullSynthesizeCompKindFromMCSimpleGenericTypes.class),
-      Arguments.of(montiArcMillSetup(), FullSynthesizeCompKindFromMCSimpleGenericTypes.class)
+      Arguments.of(arcBasisMillSetup(), FullSynthesizeCompKindFromMCComponentTypes.class),
+      Arguments.of(montiArcMillSetup(), FullSynthesizeCompKindFromMCComponentTypes.class)
     );
   }
 
@@ -28,9 +28,9 @@ public class ArcBasisMillForMontiArcTest {
    * Ensures that the scopes genitor p2 is initialized with the expected type
    * printer and component synthesizer with respect to the initialized mill.
    * That is, the mill should provide a scopes genitor p2 that is initialized
-   * with a {@link FullSynthesizeCompKindFromMCSimpleGenericTypes} when using the {@link ArcBasisMill},
+   * with a {@link FullSynthesizeCompKindFromMCComponentTypes} when using the {@link ArcBasisMill},
    * respectively provide a scopes genitor p2 that is initialized with a
-   * {@link FullSynthesizeCompKindFromMCSimpleGenericTypes}, when using the {@link MontiArcMill}.
+   * {@link FullSynthesizeCompKindFromMCComponentTypes}, when using the {@link MontiArcMill}.
    *
    * @param setup                   The setup to execute, e.g., initialize the respective mill.
    * @param expectedCompSynthesizer The expected class of the component synthesizer of the scopes genitor p2.

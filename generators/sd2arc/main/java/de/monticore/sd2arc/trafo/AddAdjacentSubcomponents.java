@@ -10,7 +10,6 @@ import de.monticore.lang.sd4components._visitor.SD4ComponentsTraverser;
 import de.monticore.lang.sdbasis._ast.ASTSDArtifact;
 import de.monticore.lang.sdbasis._ast.ASTSDObject;
 import de.monticore.lang.sdbasis._ast.ASTSequenceDiagram;
-import de.monticore.types.mcbasictypes._ast.ASTMCObjectType;
 import de.monticore.lang.sdbasis._visitor.SDBasisVisitor2;
 import de.monticore.sd2arc._ast.ASTSDHiddenFreeModifier;
 
@@ -64,12 +63,13 @@ public class AddAdjacentSubcomponents implements SDBasisVisitor2 {
 
   protected Optional<ASTSDComponent> toSDComponent(ASTArcComponentType componentType, String subcomponentName) {
     for (ASTComponentInstantiation instantiation : componentType.getSubComponentInstantiations()) {
-      if (instantiation.getInstancesNames().contains(subcomponentName) && instantiation.getMCType() instanceof ASTMCObjectType objectType) {
-        return Optional.of(SD4ComponentsMill.sDComponentBuilder()
-          .setName(subcomponentName)
-          .setMCObjectType(objectType)
-          .addSDModifier(new ASTSDHiddenFreeModifier())
-          .build());
+      if (instantiation.getInstancesNames().contains(subcomponentName)) {
+        return EmbeddingComponent.toMCObjectType(instantiation.getMCComponentType())
+          .map(objectType -> SD4ComponentsMill.sDComponentBuilder()
+            .setName(subcomponentName)
+            .setMCObjectType(objectType)
+            .addSDModifier(new ASTSDHiddenFreeModifier())
+            .build());
       }
     }
     return Optional.empty();

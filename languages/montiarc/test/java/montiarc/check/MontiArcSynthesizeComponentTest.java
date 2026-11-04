@@ -7,7 +7,7 @@ import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.CompKindOfGenericComponentType;
-import de.monticore.types.check.FullSynthesizeCompKindFromMCSimpleGenericTypes;
+import de.monticore.types.check.FullSynthesizeCompKindFromMCComponentTypes;
 import de.monticore.types.check.SymTypeOfGenerics;
 import de.monticore.types.check.SymTypeOfObject;
 import de.monticore.types.mcbasictypes._ast.ASTMCPrimitiveType;
@@ -15,6 +15,9 @@ import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCBasicTypeArgument;
 import de.monticore.types.mccollectiontypes._ast.ASTMCPrimitiveTypeArgument;
+import de.monticore.types.mccomponenttypes._ast.ASTMCGenericComponentType;
+import de.monticore.types.mccomponenttypes._ast.ASTMCGenericComponentTypeBuilder;
+import de.monticore.types.mccomponenttypes._ast.ASTMCQualifiedComponentType;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericTypeBuilder;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCCustomTypeArgument;
@@ -45,14 +48,14 @@ public class MontiArcSynthesizeComponentTest extends MontiArcTestBase {
     MontiArcMill.globalScope().addSubScope(compSym.getSpannedScope());
 
     // Now build the qualified type
-    ASTMCQualifiedType astComp = MontiArcMill.mCQualifiedTypeBuilder()
+    ASTMCQualifiedComponentType astComp = MontiArcMill.mCQualifiedComponentTypeBuilder()
       .setMCQualifiedName(MontiArcMill.mCQualifiedNameBuilder()
         .addParts(compName)
         .build())
       .build();
     astComp.setEnclosingScope(MontiArcMill.globalScope());
 
-    FullSynthesizeCompKindFromMCSimpleGenericTypes synth = new FullSynthesizeCompKindFromMCSimpleGenericTypes();
+    FullSynthesizeCompKindFromMCComponentTypes synth = new FullSynthesizeCompKindFromMCComponentTypes();
 
     // When
     Optional<CompKindExpression> result = synth.synthesize(astComp);
@@ -107,14 +110,14 @@ public class MontiArcSynthesizeComponentTest extends MontiArcTestBase {
     ASTMCType astListOfString = createGenericType(ImmutableList.of(listName), MontiArcMill.globalScope(), astString);
 
     // Now build qualified and unqualified generic types
-    ASTMCBasicGenericType astNormalComp = createGenericType(
+    ASTMCGenericComponentType astNormalComp = createGenericComponentType(
       ImmutableList.of(compName),
       MontiArcMill.globalScope(),
       astString, astListOfString
     );
     astNormalComp.setEnclosingScope(MontiArcMill.globalScope());
 
-    FullSynthesizeCompKindFromMCSimpleGenericTypes synth = new FullSynthesizeCompKindFromMCSimpleGenericTypes();
+    FullSynthesizeCompKindFromMCComponentTypes synth = new FullSynthesizeCompKindFromMCComponentTypes();
 
     // When
     Optional<CompKindExpression> result = synth.synthesize(astNormalComp);
@@ -137,14 +140,14 @@ public class MontiArcSynthesizeComponentTest extends MontiArcTestBase {
   @Test
   public void shouldNotSynthesizeFromUnresolvableType() {
     // Now build the qualified type
-    ASTMCQualifiedType astComp = MontiArcMill.mCQualifiedTypeBuilder()
+    ASTMCQualifiedComponentType astComp = MontiArcMill.mCQualifiedComponentTypeBuilder()
       .setMCQualifiedName(MontiArcMill.mCQualifiedNameBuilder()
         .addParts("Unresolvable")
         .build())
       .build();
     astComp.setEnclosingScope(MontiArcMill.globalScope());
 
-    FullSynthesizeCompKindFromMCSimpleGenericTypes synth = new FullSynthesizeCompKindFromMCSimpleGenericTypes();
+    FullSynthesizeCompKindFromMCComponentTypes synth = new FullSynthesizeCompKindFromMCComponentTypes();
 
     // When
     Optional<CompKindExpression> result = synth.synthesize(astComp);
@@ -155,18 +158,18 @@ public class MontiArcSynthesizeComponentTest extends MontiArcTestBase {
 
 
   /**
-   * Returns a {@link ASTMCBasicGenericType} whose format is {@code name.parts<typeArg[0], typeArg[1], ...>}.
+   * Returns a {@link ASTMCGenericComponentType} whose format is {@code name.parts<typeArg[0], typeArg[1], ...>}.
    * All newly created AST objects are enclosed by {@code enclScope}.
    */
-  protected static ASTMCBasicGenericType createGenericType(@NotNull List<String> nameParts,
-                                                           @NotNull IMontiArcScope enclScope,
-                                                           @NotNull ASTMCType... typeArgs) {
+  protected static ASTMCGenericComponentType createGenericComponentType(@NotNull List<String> nameParts,
+                                                                        @NotNull IMontiArcScope enclScope,
+                                                                        @NotNull ASTMCType... typeArgs) {
     Preconditions.checkNotNull(nameParts);
     Preconditions.checkNotNull(enclScope);
     Preconditions.checkNotNull(typeArgs);
     Preconditions.checkArgument(Arrays.stream(typeArgs).allMatch(Objects::nonNull));
 
-    ASTMCBasicGenericTypeBuilder builder = MontiArcMill.mCBasicGenericTypeBuilder()
+    ASTMCGenericComponentTypeBuilder builder = MontiArcMill.mCGenericComponentTypeBuilder()
       .setNamesList(nameParts);
 
     for(ASTMCType typeArg : typeArgs) {
@@ -183,6 +186,40 @@ public class MontiArcSynthesizeComponentTest extends MontiArcTestBase {
         asArg.setEnclosingScope(enclScope);
         builder.addMCTypeArgument(asArg);
 
+      } else {
+        ASTMCCustomTypeArgument asArg = MontiArcMill.mCCustomTypeArgumentBuilder().setMCType(typeArg).build();
+        asArg.setEnclosingScope(enclScope);
+        builder.addMCTypeArgument(asArg);
+      }
+    }
+
+    ASTMCGenericComponentType type = builder.build();
+    type.setEnclosingScope(enclScope);
+    return type;
+  }
+
+  protected static ASTMCBasicGenericType createGenericType(@NotNull List<String> nameParts,
+                                                           @NotNull IMontiArcScope enclScope,
+                                                           @NotNull ASTMCType... typeArgs) {
+    Preconditions.checkNotNull(nameParts);
+    Preconditions.checkNotNull(enclScope);
+    Preconditions.checkNotNull(typeArgs);
+    Preconditions.checkArgument(Arrays.stream(typeArgs).allMatch(Objects::nonNull));
+
+    ASTMCBasicGenericTypeBuilder builder = MontiArcMill.mCBasicGenericTypeBuilder()
+      .setNamesList(nameParts);
+
+    for (ASTMCType typeArg : typeArgs) {
+      if (typeArg instanceof ASTMCPrimitiveType) {
+        ASTMCPrimitiveTypeArgument asArg = MontiArcMill.mCPrimitiveTypeArgumentBuilder()
+          .setMCPrimitiveType((ASTMCPrimitiveType) typeArg).build();
+        asArg.setEnclosingScope(enclScope);
+        builder.addMCTypeArgument(asArg);
+      } else if (typeArg instanceof ASTMCQualifiedType) {
+        ASTMCBasicTypeArgument asArg = MontiArcMill.mCBasicTypeArgumentBuilder()
+          .setMCQualifiedType((ASTMCQualifiedType) typeArg).build();
+        asArg.setEnclosingScope(enclScope);
+        builder.addMCTypeArgument(asArg);
       } else {
         ASTMCCustomTypeArgument asArg = MontiArcMill.mCCustomTypeArgumentBuilder().setMCType(typeArg).build();
         asArg.setEnclosingScope(enclScope);

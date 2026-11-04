@@ -26,7 +26,7 @@
 component grammar ArcBasis extends 
         de.monticore.MCBasics,
         de.monticore.UMLStereotype,
-        de.monticore.types.MCBasicTypes,
+        de.monticore.types.MCComponentTypes,
         de.monticore.types.TypeParameters,
         de.monticore.expressions.ExpressionsBasis,
         de.monticore.symbols.CompSymbols,
@@ -96,7 +96,7 @@ component grammar ArcBasis extends
   ;
 
   ArcParent =
-    type:MCType ( "(" (ArcArgument || ",")* ")" )?
+    type:MCComponentType ( "(" (ArcArgument || ",")* ")" )?
   ;
 
   /**
@@ -169,7 +169,7 @@ component grammar ArcBasis extends
    * @attribute componentInstance A list of instantiated components.
    */
   ComponentInstantiation implements ArcElement <100> =
-    Stereotype? MCType (ComponentInstance || ",")+ ";"
+    Stereotype? MCComponentType (ComponentInstance || ",")+ ";"
   ;
 
   /**

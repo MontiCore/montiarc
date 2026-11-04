@@ -101,7 +101,7 @@ public class ArcBasisPrettyPrinter extends ArcBasisPrettyPrinterTOP {
   @Override
   public void handle(@NotNull ASTComponentInstantiation node) {
     Preconditions.checkNotNull(node);
-    node.getMCType().accept(this.getTraverser());
+    node.getMCComponentType().accept(this.getTraverser());
     this.getPrinter().stripTrailing();
     this.getPrinter().print(" ");
     acceptSeparatedList(node.getComponentInstanceList());

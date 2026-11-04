@@ -6,6 +6,7 @@ import arcbasis.ArcBasisTestBase;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.types.mcbasictypes._ast.ASTMCObjectType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
+import de.monticore.types.mccomponenttypes._ast.ASTMCComponentType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -88,7 +89,7 @@ public class ASTComponentTypeTest extends ArcBasisTestBase {
           .addArcElement(ArcBasisMill.connectorBuilder()
             .setSource("sub1.o1").setTargetList("sub2.i1").build())
           .addArcElement(ArcBasisMill.componentInstantiationBuilder()
-            .setMCType(Mockito.mock(ASTMCObjectType.class))
+            .setMCComponentType(Mockito.mock(ASTMCComponentType.class))
             .setComponentInstanceList("sub1", "sub2").build())
           .addArcElement(ArcBasisMill.connectorBuilder()
             .setSource("i2").setTargetList("sub1.i2", "sub2.i2").build())
@@ -144,15 +145,15 @@ public class ASTComponentTypeTest extends ArcBasisTestBase {
       .setHead(ArcBasisMill.componentHeadBuilder().build())
       .setBody(ArcBasisMill.componentBodyBuilder()
         .addArcElement(ArcBasisMill.componentInstantiationBuilder()
-          .setMCType(Mockito.mock(ASTMCObjectType.class)).setComponentInstanceList("a1").build())
+          .setMCComponentType(Mockito.mock(ASTMCComponentType.class)).setComponentInstanceList("a1").build())
         .addArcElement(ArcBasisMill.arcComponentTypeBuilder().setName("A")
           .setBody(ArcBasisMill.componentBodyBuilder().build())
           .setHead(ArcBasisMill.componentHeadBuilder().build())
           .build())
         .addArcElement(ArcBasisMill.componentInstantiationBuilder()
-          .setMCType(Mockito.mock(ASTMCObjectType.class)).setComponentInstanceList("a2").build())
+          .setMCComponentType(Mockito.mock(ASTMCComponentType.class)).setComponentInstanceList("a2").build())
         .addArcElement(ArcBasisMill.componentInstantiationBuilder()
-          .setMCType(Mockito.mock(ASTMCObjectType.class)).setComponentInstanceList("a3", "a4", "a5")
+          .setMCComponentType(Mockito.mock(ASTMCComponentType.class)).setComponentInstanceList("a3", "a4", "a5")
           .build())
         .addArcElement(ArcBasisMill.arcComponentTypeBuilder().setName("B")
           .setComponentInstanceList("b1", "b2")

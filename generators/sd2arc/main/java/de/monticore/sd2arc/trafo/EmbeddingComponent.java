@@ -13,6 +13,10 @@ import de.monticore.lang.sdbasis._ast.ASTSDObject;
 import de.monticore.lang.sdbasis._ast.ASTSequenceDiagram;
 import de.monticore.lang.sdbasis._visitor.SDBasisVisitor2;
 import de.monticore.types.mcbasictypes._ast.ASTMCObjectType;
+import de.monticore.types.mccomponenttypes._ast.ASTMCComponentType;
+import de.monticore.types.mccomponenttypes._ast.ASTMCGenericComponentType;
+import de.monticore.types.mccomponenttypes._ast.ASTMCQualifiedComponentType;
+import de.monticore.types.mcsimplegenerictypes.MCSimpleGenericTypesMill;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
@@ -88,13 +92,32 @@ public class EmbeddingComponent implements SDBasisVisitor2 {
       for (ASTSDObject o : node.getSDObjectList()) {
         if (o instanceof ASTSDComponent component && !component.isPresentMCObjectType()) {
           for (ASTComponentInstantiation instantiation : compilationUnit.getArcComponentType().getSubComponentInstantiations()) {
-            if (instantiation.getInstancesNames().contains(o.getName()) && instantiation.getMCType() instanceof ASTMCObjectType objectType) {
-              component.setMCObjectType(objectType);
-              break;
+            if (instantiation.getInstancesNames().contains(o.getName())) {
+              Optional<ASTMCObjectType> objectType = toMCObjectType(instantiation.getMCComponentType());
+              if (objectType.isPresent()) {
+                component.setMCObjectType(objectType.get());
+                break;
+              }
             }
           }
         }
       }
     }
+  }
+
+  protected static Optional<ASTMCObjectType> toMCObjectType(ASTMCComponentType componentType) {
+    if (componentType instanceof ASTMCQualifiedComponentType qualifiedType) {
+      return Optional.of(SD4ComponentsMill.mCQualifiedTypeBuilder()
+        .setMCQualifiedName(qualifiedType.getMCQualifiedName().deepClone())
+        .build());
+    }
+    if (componentType instanceof ASTMCGenericComponentType genericType) {
+      ASTMCGenericComponentType clonedType = genericType.deepClone();
+      return Optional.of(MCSimpleGenericTypesMill.mCBasicGenericTypeBuilder()
+        .setNamesList(clonedType.getNameList())
+        .setMCTypeArgumentsList(clonedType.getMCTypeArgumentList())
+        .build());
+    }
+    return Optional.empty();
   }
 }

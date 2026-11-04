@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
-package components;
+package parser;
 
 /**
  * Invalid model: Primitive types cannot be used as types of subcomponents
  * (primitive types are not components).
  */
-component MissingComponent9 {
+component PrimitiveSubcomponentTypes {
   boolean sub1;
   byte sub2;
   short sub3;

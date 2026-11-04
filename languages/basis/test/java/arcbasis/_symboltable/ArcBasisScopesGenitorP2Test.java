@@ -28,8 +28,9 @@ import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
-import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
+import de.monticore.types.mccomponenttypes._ast.ASTMCComponentType;
+import de.monticore.types.mccomponenttypes._ast.ASTMCQualifiedComponentType;
 import de.monticore.types.typeparameters._ast.ASTTypeParameter;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.MCError;
@@ -150,7 +151,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
 
     ASTComponentHead head = ArcBasisMill.componentHeadBuilder()
       .addArcParent(ArcBasisMill.arcParentBuilder()
-        .setType(ArcBasisMill.mCQualifiedTypeBuilder()
+        .setType(ArcBasisMill.mCQualifiedComponentTypeBuilder()
           .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
             .addParts(parentCompName)
             .build())
@@ -175,7 +176,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     comp.setSpannedScope(child.getSpannedScope());
     head.setEnclosingScope(child.getSpannedScope());
     head.getArcParent(0).getType().setEnclosingScope(child.getSpannedScope());
-    ((ASTMCQualifiedType) head.getArcParent(0).getType()).getMCQualifiedName().setEnclosingScope(child.getSpannedScope());
+    ((ASTMCQualifiedComponentType) head.getArcParent(0).getType()).getMCQualifiedName().setEnclosingScope(child.getSpannedScope());
 
     // When
     getScopeGenP2().visit(head);
@@ -206,7 +207,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
 
     ASTComponentHead head = ArcBasisMill.componentHeadBuilder()
       .addArcParent(ArcBasisMill.arcParentBuilder()
-        .setType(ArcBasisMill.mCQualifiedTypeBuilder()
+        .setType(ArcBasisMill.mCQualifiedComponentTypeBuilder()
           .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
             .addParts("ParentComp")
             .build())
@@ -229,7 +230,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     comp.setSpannedScope(child.getSpannedScope());
     head.setEnclosingScope(child.getSpannedScope());
     head.getArcParent(0).getType().setEnclosingScope(child.getSpannedScope());
-    ((ASTMCQualifiedType) head.getArcParent(0).getType()).getMCQualifiedName().setEnclosingScope(child.getSpannedScope());
+    ((ASTMCQualifiedComponentType) head.getArcParent(0).getType()).getMCQualifiedName().setEnclosingScope(child.getSpannedScope());
 
     // When
     getScopeGenP2().visit(head);
@@ -269,7 +270,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
 
     ASTComponentHead head = ArcBasisMill.componentHeadBuilder()
       .addArcParent(ArcBasisMill.arcParentBuilder()
-        .setType(ArcBasisMill.mCQualifiedTypeBuilder()
+        .setType(ArcBasisMill.mCQualifiedComponentTypeBuilder()
           .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
             .addParts(parentCompName)
             .build())
@@ -296,7 +297,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     comp.setSpannedScope(child.getSpannedScope());
     head.setEnclosingScope(child.getSpannedScope());
     head.getArcParent(0).getType().setEnclosingScope(child.getSpannedScope());
-    ((ASTMCQualifiedType) head.getArcParent(0).getType()).getMCQualifiedName().setEnclosingScope(child.getSpannedScope());
+    ((ASTMCQualifiedComponentType) head.getArcParent(0).getType()).getMCQualifiedName().setEnclosingScope(child.getSpannedScope());
 
     // When
     getScopeGenP2().visit(head);
@@ -392,7 +393,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
       .addParts(abstractionName)
       .build();
     astTypeName.setEnclosingScope(compScope);
-    ASTMCType astType = ArcBasisMill.mCQualifiedTypeBuilder()
+    ASTMCComponentType astType = ArcBasisMill.mCQualifiedComponentTypeBuilder()
       .setMCQualifiedName(astTypeName)
       .build();
     astType.setEnclosingScope(compScope);
@@ -445,7 +446,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
       .addParts("NotExistent")
       .build();
     astTypeName.setEnclosingScope(compScope);
-    ASTMCType astType = ArcBasisMill.mCQualifiedTypeBuilder()
+    ASTMCComponentType astType = ArcBasisMill.mCQualifiedComponentTypeBuilder()
       .setMCQualifiedName(astTypeName)
       .build();
     astType.setEnclosingScope(compScope);
@@ -505,7 +506,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
       .addParts(abstractionName)
       .build();
     astTypeName.setEnclosingScope(compScope);
-    ASTMCType astType = ArcBasisMill.mCQualifiedTypeBuilder()
+    ASTMCComponentType astType = ArcBasisMill.mCQualifiedComponentTypeBuilder()
       .setMCQualifiedName(astTypeName)
       .build();
     astType.setEnclosingScope(ArcBasisMill.globalScope());
@@ -834,8 +835,8 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     // Then
     Assertions.assertTrue(getScopeGenP2().getCurrentCompInstanceType().isPresent());
     Assertions.assertEquals(comp, getScopeGenP2().getCurrentCompInstanceType().get().getTypeInfo());
-    Assertions.assertTrue(ast.getMCType().getDefiningSymbol().isPresent());
-    Assertions.assertEquals(ast.getMCType().getDefiningSymbol().get(), comp);
+    Assertions.assertTrue(ast.getMCComponentType().getDefiningSymbol().isPresent());
+    Assertions.assertEquals(ast.getMCComponentType().getDefiningSymbol().get(), comp);
   }
 
   @Test
@@ -931,13 +932,13 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
       .setSpannedScope(ArcBasisMill.scope())
       .build();
 
-    ASTMCType astCompType = ArcBasisMill.mCQualifiedTypeBuilder()
+    ASTMCComponentType astCompType = ArcBasisMill.mCQualifiedComponentTypeBuilder()
       .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
         .addParts(compName)
         .build())
       .build();
     ASTComponentInstantiation instantiation = ArcBasisMill.componentInstantiationBuilder()
-      .setMCType(astCompType)
+      .setMCComponentType(astCompType)
       .addInstance("inst1")
       .addInstance("inst2")
       .build();

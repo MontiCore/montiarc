@@ -74,8 +74,8 @@ public class VariabilityParserTestHelper {
                     ).build())
                 ).build()
               ).build(),
-              MontiArcMill.componentInstantiationBuilder().setMCType(
-                MontiArcMill.mCQualifiedTypeBuilder().setMCQualifiedName(
+              MontiArcMill.componentInstantiationBuilder().setMCComponentType(
+                MontiArcMill.mCQualifiedComponentTypeBuilder().setMCQualifiedName(
                   MontiArcMill.mCQualifiedNameBuilder().setPartsList(Collections.singletonList("A")
                   ).build()
                 ).build()

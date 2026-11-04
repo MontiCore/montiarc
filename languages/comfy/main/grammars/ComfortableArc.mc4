@@ -85,6 +85,6 @@ component grammar ComfortableArc extends ArcBasis {
    * @attribute fullyConnected Prevents creation of automatic connections.
    */
   FullyConnectedComponentInstantiation extends ComponentInstantiation =
-    key("fullyConnected") MCType (ComponentInstance || ",")* ";"
+    key("fullyConnected") MCComponentType (ComponentInstance || ",")* ";"
   ;
 }

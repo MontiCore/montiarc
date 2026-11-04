@@ -7,6 +7,7 @@ import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
+import de.monticore.types.mccomponenttypes._ast.ASTMCComponentType;
 import montiarc.util.ArcError;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -50,9 +51,7 @@ public class PortsConnectedTest extends ArcBasisTestBase {
             .build())
           .build())
         .addArcElement(ArcBasisMill.componentInstantiationBuilder()
-          .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder()
-            .setPrimitive(ASTConstantsMCBasicTypes.BYTE)
-            .build())
+          .setMCComponentType(Mockito.mock(ASTMCComponentType.class))
           .setComponentInstanceList("sub1", "sub2").build())
         .addArcElement(ArcBasisMill.connectorBuilder().setSource("i1").setTargetList("o1", "o2").build())
         .addArcElement(ArcBasisMill.connectorBuilder().setSource("i2").setTargetList("o3", "i3").build())
@@ -75,7 +74,7 @@ public class PortsConnectedTest extends ArcBasisTestBase {
             .build())
           .build())
         .addArcElement(ArcBasisMill.componentInstantiationBuilder()
-          .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build())
+          .setMCComponentType(Mockito.mock(ASTMCComponentType.class))
           .setComponentInstanceList("sub1", "sub2").build())
         .addArcElement(ArcBasisMill.connectorBuilder().setSource("i1").setTargetList("o1").build())
         .addArcElement(ArcBasisMill.connectorBuilder().setSource("o2").setTargetList("o3").build())

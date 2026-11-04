@@ -22,8 +22,8 @@ import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
-import de.monticore.types.mcbasictypes._ast.ASTMCObjectType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
+import de.monticore.types.mccomponenttypes._ast.ASTMCComponentType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -225,12 +225,12 @@ public class ArcBasisScopesGenitorTest extends ArcBasisTestBase {
 
   @Test
   public void shouldVisitComponentInstantiation() {
-    ASTMCObjectType type = ArcBasisMill.mCQualifiedTypeBuilder()
+    ASTMCComponentType type = ArcBasisMill.mCQualifiedComponentTypeBuilder()
       .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
         .setPartsList(Lists.newArrayList("String"))
         .build())
       .build();
-    ASTComponentInstantiation ast = arcbasis.ArcBasisMill.componentInstantiationBuilder().setMCType(type)
+    ASTComponentInstantiation ast = arcbasis.ArcBasisMill.componentInstantiationBuilder().setMCComponentType(type)
       .setComponentInstanceList("sub1", "sub2", "sub3").build();
     IArcBasisScope scope = ArcBasisMill.scope();
     this.getSymTab().putOnStack(scope);

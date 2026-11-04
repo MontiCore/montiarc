@@ -2,7 +2,7 @@
 package arcbasis._ast;
 
 import arcbasis.ArcBasisTestBase;
-import de.monticore.types.mcbasictypes._ast.ASTMCObjectType;
+import de.monticore.types.mccomponenttypes._ast.ASTMCComponentType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,7 +26,7 @@ public class ComponentInstantiationBuilderTest extends ArcBasisTestBase {
   @BeforeEach
   public void setUpBuilder() {
     this.builder = new ASTComponentInstantiationBuilder();
-    this.builder.setMCType(Mockito.mock(ASTMCObjectType.class)).setComponentInstanceList("a", "b", "c");
+    this.builder.setMCComponentType(Mockito.mock(ASTMCComponentType.class)).setComponentInstanceList("a", "b", "c");
   }
 
   @ParameterizedTest

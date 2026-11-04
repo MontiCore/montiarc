@@ -433,20 +433,6 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mpk(PKG_COMP, "ParameterDefaultForwardReference.arc"),
         fn(ERROR, PKG_COMP, "ParameterDefaultForwardReference.arc", 8, 52, 8, 53, PARAMETER_DEFAULT_FORWARD_REFERENCE, "a", "b")
       ),
-      arg("MissingComponentTest8",
-        mpk(PKG_COMP, "MissingComponent8.arc"),
-        fn(ERROR, PKG_COMP, "MissingComponent8.arc", 9, 3, 9, 10, MISSING_COMPONENT, "boolean")
-      ),
-      arg("MissingComponentTest9",
-        mpk(PKG_COMP, "MissingComponent9.arc"),
-        fn(ERROR, PKG_COMP, "MissingComponent9.arc", 9, 3, 9, 10, MISSING_COMPONENT, "boolean"),
-        fn(ERROR, PKG_COMP, "MissingComponent9.arc", 10, 3, 10, 7, MISSING_COMPONENT, "byte"),
-        fn(ERROR, PKG_COMP, "MissingComponent9.arc", 11, 3, 11, 8, MISSING_COMPONENT, "short"),
-        fn(ERROR, PKG_COMP, "MissingComponent9.arc", 12, 3, 12, 6, MISSING_COMPONENT, "int"),
-        fn(ERROR, PKG_COMP, "MissingComponent9.arc", 13, 3, 13, 7, MISSING_COMPONENT, "long"),
-        fn(ERROR, PKG_COMP, "MissingComponent9.arc", 14, 3, 14, 8, MISSING_COMPONENT, "float"),
-        fn(ERROR, PKG_COMP, "MissingComponent9.arc", 15, 3, 15, 9, MISSING_COMPONENT, "double")
-      ),
       arg("MissingPortTypeTest1",
         mpk(PKG_COMP, "MissingPortType1.arc"),
         fn(ERROR, PKG_COMP, "MissingPortType1.arc", 10, 11, 10, 18, CANT_FIND_SYMBOL, "Missing")

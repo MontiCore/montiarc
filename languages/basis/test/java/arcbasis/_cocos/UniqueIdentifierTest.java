@@ -244,7 +244,7 @@ public class UniqueIdentifierTest extends ArcBasisTestBase {
     Preconditions.checkNotNull(name);
 
     return ArcBasisMill.componentInstantiationBuilder()
-      .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+      .setMCComponentType(ArcBasisMill.mCQualifiedComponentTypeBuilder()
         .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
           .addParts("int")
           .build())

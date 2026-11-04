@@ -4,7 +4,7 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTArcParent;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
-import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
+import de.monticore.types.mccomponenttypes._ast.ASTMCGenericComponentType;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -25,7 +25,7 @@ public class ComponentHeritageRawType implements ArcBasisASTArcParentCoCo {
       Log.trace(() -> "Skip coco check for " + node.get_SourcePositionStart() + ", parent link is missing.", this.getClass().getCanonicalName());
     } else if (node.getType().getDefiningSymbol().get() instanceof ComponentTypeSymbol &&
       !((ComponentTypeSymbol) node.getType().getDefiningSymbol().get()).getTypeParameters().isEmpty()
-      && !(node.getType() instanceof ASTMCBasicGenericType)) {
+      && !(node.getType() instanceof ASTMCGenericComponentType)) {
       Log.warn(ArcError.RAW_USE_OF_PARAMETRIZED_TYPE.format(node.getType().printType()),
         node.get_SourcePositionStart()
       );

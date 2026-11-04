@@ -24,7 +24,7 @@ import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.symbols.compsymbols._visitor.CompSymbolsVisitor2;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
 import de.monticore.types.check.CompKindExpression;
-import de.monticore.types.check.FullSynthesizeCompKindFromMCSimpleGenericTypes;
+import de.monticore.types.check.FullSynthesizeCompKindFromMCComponentTypes;
 import de.monticore.types.check.ISynthesizeComponent;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
@@ -47,7 +47,7 @@ public class ArcBasisScopesGenitorP2
   protected ISynthesizeComponent componentSynthesizer;
 
   public ArcBasisScopesGenitorP2() {
-    this(new FullSynthesizeCompKindFromMCSimpleGenericTypes());
+    this(new FullSynthesizeCompKindFromMCComponentTypes());
   }
 
   public ArcBasisScopesGenitorP2(@NotNull ISynthesizeComponent componentSynthesizer) {
@@ -136,9 +136,10 @@ public class ArcBasisScopesGenitorP2
   public void visit(@NotNull ASTComponentInstantiation node) {
     Preconditions.checkNotNull(node);
 
-    Optional<CompKindExpression> comp = this.getComponentSynthesizer().synthesize(node.getMCType());
+    Optional<CompKindExpression> comp =
+      this.getComponentSynthesizer().synthesize(node.getMCComponentType());
     if (comp.isPresent()) {
-      node.getMCType().setDefiningSymbol(comp.get().getTypeInfo());
+      node.getMCComponentType().setDefiningSymbol(comp.get().getTypeInfo());
       this.setCurrentCompInstanceType(comp.get());
     }
   }

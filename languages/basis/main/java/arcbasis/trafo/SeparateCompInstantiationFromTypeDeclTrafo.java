@@ -9,7 +9,7 @@ import arcbasis._ast.ASTArcComponentType;
 import arcbasis._visitor.ArcBasisVisitor2;
 import com.google.common.base.Preconditions;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
-import de.monticore.types.mcbasictypes._ast.ASTMCType;
+import de.monticore.types.mccomponenttypes._ast.ASTMCComponentType;
 import de.se_rwth.commons.SourcePosition;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -45,7 +45,7 @@ public class SeparateCompInstantiationFromTypeDeclTrafo implements ArcBasisVisit
       if (!instances.isEmpty()) {
         // Create new instantiation declaration and add it to the component body
         ASTComponentInstantiation instDecl = ArcBasisMill.componentInstantiationBuilder()
-          .setMCType(buildMCTypeFrom(cType))
+          .setMCComponentType(buildMCTypeFrom(cType))
           .setComponentInstancesList(instances)
           .set_SourcePositionStart(instances.get(0).get_SourcePositionStart())
           .set_SourcePositionEnd(instances.get(instances.size() - 1).get_SourcePositionEnd())
@@ -60,9 +60,9 @@ public class SeparateCompInstantiationFromTypeDeclTrafo implements ArcBasisVisit
   }
 
   /**
-   * @return an {@link ASTMCType} with the simple name of the {@code compType}.
+   * @return an {@link ASTMCComponentType} with the simple name of the {@code compType}.
    */
-  protected ASTMCType buildMCTypeFrom(ASTArcComponentType compType) {
+  protected ASTMCComponentType buildMCTypeFrom(ASTArcComponentType compType) {
     SourcePosition startPos = SourcePositionUtil.elongate(
       compType.get_SourcePositionStart(),
       "component ".length()
@@ -78,7 +78,7 @@ public class SeparateCompInstantiationFromTypeDeclTrafo implements ArcBasisVisit
       .set_SourcePositionEnd(endPos)
       .build();
 
-    return ArcBasisMill.mCQualifiedTypeBuilder()
+    return ArcBasisMill.mCQualifiedComponentTypeBuilder()
       .setMCQualifiedName(asName)
       .set_SourcePositionStart(startPos.clone())
       .set_SourcePositionEnd(endPos.clone())

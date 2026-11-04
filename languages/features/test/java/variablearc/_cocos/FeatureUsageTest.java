@@ -4,6 +4,7 @@ package variablearc._cocos;
 import arcbasis._ast.ASTArcElement;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTArcComponentType;
+import de.monticore.types.mccomponenttypes._ast.ASTMCComponentType;
 import montiarc.util.Error;
 import montiarc.util.VariableArcError;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -72,7 +73,7 @@ public class FeatureUsageTest extends VariableArcTestBase {
                 .build(),
               VariableArcMill.componentInstantiationBuilder()
                 .setComponentInstanceList("i")
-                .setMCType(VariableArcMill.mCPrimitiveTypeBuilder().build())
+                .setMCComponentType(Mockito.mock(ASTMCComponentType.class))
                 .build()
             ))
             .build())
@@ -93,7 +94,7 @@ public class FeatureUsageTest extends VariableArcTestBase {
                 .build(),
               VariableArcMill.componentInstantiationBuilder()
                 .setComponentInstanceList("i")
-                .setMCType(VariableArcMill.mCPrimitiveTypeBuilder().build())
+                .setMCComponentType(Mockito.mock(ASTMCComponentType.class))
                 .build(),
               VariableArcMill.arcVarIfBuilder()
                 .setCondition(VariableArcMill.nameExpressionBuilder().setName("f2").build())

@@ -21,7 +21,7 @@ import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.CompKindOfComponentType;
 import de.monticore.types.check.SymTypeExpressionFactory;
-import de.monticore.types.mcbasictypes._ast.ASTMCType;
+import de.monticore.types.mccomponenttypes._ast.ASTMCComponentType;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
@@ -503,7 +503,7 @@ class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCheckTe
     sym.setAstNode(inst);
     
     return ArcBasisMill.componentInstantiationBuilder()
-      .setMCType(Mockito.mock(ASTMCType.class))
+      .setMCComponentType(Mockito.mock(ASTMCComponentType.class))
       .addComponentInstance(inst)
       .build();
   }

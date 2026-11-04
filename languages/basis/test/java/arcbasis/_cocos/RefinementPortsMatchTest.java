@@ -20,6 +20,7 @@ import de.monticore.types.check.CompKindOfComponentType;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
+import de.monticore.types.mccomponenttypes._ast.ASTMCComponentType;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.apache.commons.lang3.tuple.Pair;
@@ -480,7 +481,7 @@ class RefinementPortsMatchTest extends ArcBasisTestBase {
       .setHead(ArcBasisMill.componentHeadBuilder().build())
       .build();
     compType.getHead().addArcParent(ArcBasisMill.arcParentBuilder()
-      .setType(astTypeFrom("Parent")).build()
+      .setType(astComponentTypeFrom("Parent")).build()
     );
 
     ComponentTypeSymbol compSym = ArcBasisMill.componentTypeSymbolBuilder()
@@ -549,7 +550,7 @@ class RefinementPortsMatchTest extends ArcBasisTestBase {
     Preconditions.checkNotNull(compName);
 
     return ArcBasisMill.arcParentBuilder()
-      .setType(astTypeFrom(compName))
+      .setType(astComponentTypeFrom(compName))
       .build();
   }
 
@@ -611,6 +612,17 @@ class RefinementPortsMatchTest extends ArcBasisTestBase {
     Preconditions.checkNotNull(typeName);
 
     return ArcBasisMill.mCQualifiedTypeBuilder()
+      .setMCQualifiedName(
+        ArcBasisMill.mCQualifiedNameBuilder()
+          .addParts(typeName)
+          .build()
+      ).build();
+  }
+
+  protected ASTMCComponentType astComponentTypeFrom(@NotNull String typeName) {
+    Preconditions.checkNotNull(typeName);
+
+    return ArcBasisMill.mCQualifiedComponentTypeBuilder()
       .setMCQualifiedName(
         ArcBasisMill.mCQualifiedNameBuilder()
           .addParts(typeName)
