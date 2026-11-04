@@ -5,7 +5,7 @@ ${tc.signature("portSym")}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 
 @Override
-public <@Util.getStaticPortInterface portSym/><<@Util.getPortTypeString portSym.getType()/>>
+public <@Util.getStaticPortInterface portSym/><<@Util.getPortTypeString helper.getComponentHelper().getPortType(ast.getSymbol(), portSym)/>>
   ${prefixes.port()}${portSym.getName()}() {
   return this.${prefixes.port()}${portSym.getName()};
 }

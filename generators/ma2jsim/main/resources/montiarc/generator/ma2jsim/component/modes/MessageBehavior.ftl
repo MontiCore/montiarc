@@ -11,7 +11,7 @@
 
 <#list helper.getModeHelper().getTransitionsForPortEvents(ast, modeAutomaton) as port, transitions>
   <#assign portName = port.getName()>
-  public void ${prefixes.message()}${portName}(<@Util.getTypeString port.getType()/> ${portName}) {
+  public void ${prefixes.message()}${portName}(<@Util.getTypeString helper.getComponentHelper().getPortType(ast.getSymbol(), port)/> ${portName}) {
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFields.ftl", [ast.getFields()])}
 
@@ -35,7 +35,7 @@
 <#list helper.getModeHelper().getInPortsNotTriggeringAnyTransition(modeAutomaton, ast) as port>
   <#assign handleMsgOnPort>${prefixes.message()}${port.getName()}</#assign>
 
-  public void ${handleMsgOnPort}(<@Util.getTypeString port.getType()/> ${port.getName()}) {
+  public void ${handleMsgOnPort}(<@Util.getTypeString helper.getComponentHelper().getPortType(ast.getSymbol(), port)/> ${port.getName()}) {
     <#if helper.getComponentHelper().isSync(port)>
       de.se_rwth.commons.logging.Log.warn("Event behavior method was illegally called for synchronous port '${port.getName()}'.");
     </#if>

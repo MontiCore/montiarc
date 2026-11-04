@@ -6,8 +6,9 @@
 <#list ast.getSymbol().getAllIncomingPorts() as portSym>
   <#assign portAccessor>this.${prefixes.port()}${portSym.getName()}()</#assign>
   <#assign methodName = prefixes.portValueOf() + portSym.getName()/>
-  protected <@Util.getTypeString portSym.getType()/> ${methodName}() {
-      return ${portAccessor}.isTickBlocked() ? ${helper.getTypeHelper().getNullLikeValue(portSym.getType())} : ${portAccessor}.peekBuffer().getData();
+  <#assign portType = helper.getComponentHelper().getPortType(ast.getSymbol(), portSym)>
+  protected <@Util.getTypeString portType/> ${methodName}() {
+      return ${portAccessor}.isTickBlocked() ? ${helper.getTypeHelper().getNullLikeValue(portType)} : ${portAccessor}.peekBuffer().getData();
   }
 
 </#list>

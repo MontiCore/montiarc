@@ -16,7 +16,7 @@ protected ${SYNC_MSG} doBuildSyncMessage() {
       <#if syncedPorts?seq_contains(inPort)>
         ${prefixes.portValueOf()}${inPort.getName()}()
       <#else>
-        ${helper.getTypeHelper().getNarrowedNullLikeValue(inPort.getType())}
+        ${helper.getTypeHelper().getNarrowedNullLikeValue(helper.getComponentHelper().getPortType(ast.getSymbol(), inPort))}
       </#if>
     <#sep>, </#sep>
     </#list>

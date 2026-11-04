@@ -9,6 +9,6 @@ public interface ${ast.getName()}${suffixes.events()}<#if isTop>${suffixes.top()
 
 <#list ast.getSymbol().getAllIncomingPorts() as portSym>
   <#assign methodName = prefixes.message() + portSym.getName()>
-  void ${methodName}(<@Util.getTypeString portSym.getType()/> msg);
+  void ${methodName}(<@Util.getTypeString helper.getComponentHelper().getPortType(ast.getSymbol(), portSym)/> msg);
 </#list>
 }

@@ -115,25 +115,26 @@ public void tick(${syncMsgType} syncedInputs) {
 <#list portList as port>
   <#assign portName = port.getName()/>
   <#assign handleMsgOnPort>${prefixes.message()}${port.getName()}</#assign>
+  <#assign portType = helper.getComponentHelper().getPortType(ast.getSymbol(), port)>
 
   <#assign msgTriggeredTransitions = helper.getBehaviorHelper().getAllTransitionsForPortWithEventTrigger(ast, automaton, port)/>
   <#list msgTriggeredTransitions as transition>
       <#-- Transition objects -->
-      protected montiarc.rte.automaton.Transition<<@Util.getTypeString port.getType() true/>> ${prefixes.transition()}${prefixes.message()}${portName}_${transition?counter};
+      protected montiarc.rte.automaton.Transition<<@Util.getTypeString portType true/>> ${prefixes.transition()}${prefixes.message()}${portName}_${transition?counter};
   </#list>
 
   <#assign msgTriggeredInnerTransitions = helper.getBehaviorHelper().getAllInnerTransitionsForPortWithEventTrigger(ast, automaton, port)/>
   <#list msgTriggeredInnerTransitions as innerTransition>
       <#-- InnerTransition objects -->
-      protected montiarc.rte.automaton.Transition<<@Util.getTypeString port.getType() true/>> ${prefixes.innerTransition()}${prefixes.message()}${portName}_${innerTransition?counter};
+      protected montiarc.rte.automaton.Transition<<@Util.getTypeString portType true/>> ${prefixes.innerTransition()}${prefixes.message()}${portName}_${innerTransition?counter};
   </#list>
 
   <#assign transitionsSize = msgTriggeredTransitions?size + msgTriggeredInnerTransitions?size/>
   <#if transitionsSize gt 0>
     <#-- Methods for the triggering input port, to execute matching transitions. -->
     @Override
-    public void ${handleMsgOnPort}(<@Util.getTypeString port.getType()/> msg) {
-      java.util.Map<Integer, montiarc.rte.automaton.Transition<<@Util.getTypeString port.getType() true/>>> enabledTransitions = new java.util.LinkedHashMap<>(${transitionsSize});
+    public void ${handleMsgOnPort}(<@Util.getTypeString portType/> msg) {
+      java.util.Map<Integer, montiarc.rte.automaton.Transition<<@Util.getTypeString portType true/>>> enabledTransitions = new java.util.LinkedHashMap<>(${transitionsSize});
 
       <#list msgTriggeredTransitions as tr>
         <#assign transition_field = prefixes.transition() + prefixes.message() + portName + "_" + tr?counter/>
@@ -160,7 +161,7 @@ public void tick(${syncMsgType} syncedInputs) {
     -- but are a required part of the automaton API.
     -->
     @Override
-    public void ${handleMsgOnPort}(<@Util.getTypeString port.getType()/> msg) {
+    public void ${handleMsgOnPort}(<@Util.getTypeString portType/> msg) {
       <#if helper.getComponentHelper().isSync(port)>
         de.se_rwth.commons.logging.Log.warn("Event behavior method was illegally called for synchronous port '${port.getName()}'.");
       </#if>

@@ -33,7 +33,7 @@ ${tc.includeArgs("montiarc.generator.ma2jsim.behavior.compute.Header.ftl", [comp
 
   protected void realTick(
     <#list inPorts as inPort>
-    <@Util.getTypeString inPort.getType()/> ${inPort.getName()}
+    <@Util.getTypeString helper.getComponentHelper().getPortType(ast.getSymbol(), inPort)/> ${inPort.getName()}
     <#sep>,</#list>
   ) {
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFields.ftl", [ast.getFields()])}
@@ -51,7 +51,7 @@ ${tc.includeArgs("montiarc.generator.ma2jsim.behavior.compute.Header.ftl", [comp
   <#list compSym.getAllIncomingPorts() as portSym>
     <#assign methodName = prefixes.message() + portSym.getName()>
     @Override
-    public void ${methodName}(<@Util.getTypeString portSym.getType()/> msg) {
+    public void ${methodName}(<@Util.getTypeString helper.getComponentHelper().getPortType(ast.getSymbol(), portSym)/> msg) {
       de.se_rwth.commons.logging.Log.warn("The message cannot be handled by compute behavior and will be ignored");
     }
   </#list>

@@ -8,12 +8,12 @@
 public <#if isTop>abstract</#if> class ${CLASS} <@Util.printTypeParameters ast/> {
 
   <#list ast.getSymbol().getAllIncomingPorts() as port>
-    public final <@Util.getTypeString port.getType()/> ${port.getName()};
+    public final <@Util.getTypeString helper.getComponentHelper().getPortType(ast.getSymbol(), port)/> ${port.getName()};
   </#list>
 
   public ${CLASS}(
     <#list ast.getSymbol().getAllIncomingPorts() as port>
-      <@Util.getTypeString port.getType()/> ${port.getName()}
+      <@Util.getTypeString helper.getComponentHelper().getPortType(ast.getSymbol(), port)/> ${port.getName()}
       <#sep>, </#sep>
     </#list>
 

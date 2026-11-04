@@ -3,4 +3,5 @@
 <#-- @ftlvariable name="helper" type="montiarc.generator.util.Helper" -->
 ${tc.signature("portSym")}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
-protected montiarc.rte.port.InOutPort<<@Util.getPortTypeString portSym.getType()/>, <@Util.getPortTypeString portSym.getType()/>> ${prefixes.port()}${portSym.getName()} = null;
+<#assign portType = helper.getComponentHelper().getPortType(ast.getSymbol(), portSym)>
+protected montiarc.rte.port.InOutPort<<@Util.getPortTypeString portType/>, <@Util.getPortTypeString portType/>> ${prefixes.port()}${portSym.getName()} = null;

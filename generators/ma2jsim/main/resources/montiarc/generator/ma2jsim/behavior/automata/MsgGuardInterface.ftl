@@ -24,7 +24,7 @@ protected interface ${ast.getName()}${suffixes.msgGuard()} <@Util.printTypeParam
   }
   boolean realCheck(
     <#list inPorts as inPort>
-      <@Util.getTypeString inPort.getType()/> ${inPort.getName()}
+      <@Util.getTypeString helper.getComponentHelper().getPortType(ast.getSymbol(), inPort)/> ${inPort.getName()}
       <#sep>,</#list>
   );
 }

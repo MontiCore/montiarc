@@ -22,8 +22,9 @@ public class ${prefixes.deploy()}Rest${comp.getName()}<#if isTop>${suffixes.top(
   @Override
   protected void setupEndpoints(${comp.getName()}${suffixes.comp()} component) {
     <#list comp.getAllIncomingPorts() as port>
-      <#if !port.getType().isGenericType()>
-      server.subscribe("/${comp.getName()}/${port.getName()}", str -> deSerializer.deserialize(str, <@Util.getPortTypeReference port.getType()/>)
+      <#assign portType = helper.getComponentHelper().getPortType(comp, port)>
+      <#if !portType.isGenericType()>
+      server.subscribe("/${comp.getName()}/${port.getName()}", str -> deSerializer.deserialize(str, <@Util.getPortTypeReference portType/>)
         .map(m -> {
           component.${prefixes.port()}${port.getName()}().receive(montiarc.rte.msg.Message.of(m));
           return true;

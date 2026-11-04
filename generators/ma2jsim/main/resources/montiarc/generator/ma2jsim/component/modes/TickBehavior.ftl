@@ -16,7 +16,7 @@ public void tick(${syncMsgClass} msg) {
 
 protected void doTick(
   <#list syncedInPorts as inPort>
-  <@Util.getTypeString inPort.getType()/> ${inPort.getName()}
+  <@Util.getTypeString helper.getComponentHelper().getPortType(ast.getSymbol(), inPort)/> ${inPort.getName()}
   <#sep>,</#list>
 ) {
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}

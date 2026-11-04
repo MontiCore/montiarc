@@ -28,7 +28,7 @@ ${tc.signature("automaton", "transition", "noInputsForActions", "useSyncMsg", "i
 <#assign transitionMsgType>
   <#if noInputsForActions> montiarc.rte.automaton.NoInput
   <#elseif useSyncMsg>${ast.getName()}${suffixes.syncMsg()}<@Util.printTypeParameters ast false/>
-  <#else><#assign port = inPorts[0]> <@Util.getTypeString port.getType() true/></#if>
+  <#else><#assign port = inPorts[0]> <@Util.getTypeString helper.getComponentHelper().getPortType(ast.getSymbol(), port) true/></#if>
 </#assign>
 
 <#assign sourceState>
@@ -158,7 +158,7 @@ new montiarc.rte.automaton.TransitionBuilder<${transitionMsgType}>()
   <#if useSyncMsg>(${ast.getName()}${suffixes.msgGuard()}<@Util.printTypeParameters ast false/>)
   <#elseif !noInputsForActions>
     <#assign port = inPorts[0]>
-    <#assign type = port.getType()>
+    <#assign type = helper.getComponentHelper().getPortType(ast.getSymbol(), port)>
     <#if helper.getTypeHelper().isUnboxedChar(type)>(montiarc.rte.automaton.guards.CharGuard)
     <#elseif helper.getTypeHelper().isUnboxedBoolean(type)>(montiarc.rte.automaton.guards.BooleanGuard)
     <#elseif helper.getTypeHelper().isUnboxedByte(type)>(montiarc.rte.automaton.guards.ByteGuard)
@@ -174,7 +174,7 @@ new montiarc.rte.automaton.TransitionBuilder<${transitionMsgType}>()
   <#if useSyncMsg>(${ast.getName()}${suffixes.msgAction()}<@Util.printTypeParameters ast false/>)
   <#elseif !noInputsForActions>
     <#assign port = inPorts[0]>
-    <#assign type = port.getType()>
+    <#assign type = helper.getComponentHelper().getPortType(ast.getSymbol(), port)>
     <#if helper.getTypeHelper().isUnboxedChar(type)>(montiarc.rte.automaton.actions.CharAction)
     <#elseif helper.getTypeHelper().isUnboxedBoolean(type)>(montiarc.rte.automaton.actions.BooleanAction)
     <#elseif helper.getTypeHelper().isUnboxedByte(type)>(montiarc.rte.automaton.actions.ByteAction)

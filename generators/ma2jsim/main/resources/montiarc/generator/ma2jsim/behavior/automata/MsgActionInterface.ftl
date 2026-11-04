@@ -24,7 +24,7 @@ protected interface ${ast.getName()}${suffixes.msgAction()}<@Util.printTypeParam
   }
   void realExecute(
     <#list inPorts as inPort>
-      <@Util.getTypeString inPort.getType()/> ${inPort.getName()}
+      <@Util.getTypeString helper.getComponentHelper().getPortType(ast.getSymbol(), inPort)/> ${inPort.getName()}
       <#sep>,</#list>
   );
 }

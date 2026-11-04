@@ -23,8 +23,9 @@ public class ${prefixes.deploy()}Mqtt${comp.getName()}<#if isTop>${suffixes.top(
   protected void setupMqttConnections(${comp.getName()}${suffixes.comp()} component)
     throws org.eclipse.paho.client.mqttv3.MqttException {
     <#list comp.getAllIncomingPorts() as port>
-      <#if !port.getType().isGenericType()>
-      mqtt.subscribe(getTopic("${comp.getName()}", "${port.getName()}"), str -> deSerializer.deserialize(str, <@Util.getPortTypeReference port.getType()/>)
+      <#assign portType = helper.getComponentHelper().getPortType(comp, port)>
+      <#if !portType.isGenericType()>
+      mqtt.subscribe(getTopic("${comp.getName()}", "${port.getName()}"), str -> deSerializer.deserialize(str, <@Util.getPortTypeReference portType/>)
         .ifPresent(m -> component.${prefixes.port()}${port.getName()}().receive(montiarc.rte.msg.Message.of(m)))
       );
       </#if>

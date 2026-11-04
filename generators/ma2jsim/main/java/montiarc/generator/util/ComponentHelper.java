@@ -157,6 +157,18 @@ public class ComponentHelper {
   }
 
   /**
+   * @return the type of {@code port} as seen from {@code component}, with type
+   * parameters inherited from generic super components bound accordingly
+   */
+  public SymTypeExpression getPortType(@NotNull ComponentTypeSymbol component,
+                                       @NotNull PortSymbol port) {
+    Preconditions.checkNotNull(component);
+    Preconditions.checkNotNull(port);
+    return this.resolver.typeOf(this.resolver.kindOf(component), port)
+      .orElseGet(port::getType);
+  }
+
+  /**
    * Returns the list of fields in an order such that every field’s initializer
    * only refers to fields that have already been initialized.
    * <p>

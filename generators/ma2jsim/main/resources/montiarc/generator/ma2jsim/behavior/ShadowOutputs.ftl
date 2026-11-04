@@ -4,7 +4,7 @@
 ${tc.signature("portSymbols")}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#list portSymbols as port>
-    <#assign type = port.getType()/>
+    <#assign type = helper.getComponentHelper().getPortType(ast.getSymbol(), port)/>
     <@Util.getTypeString type/> ${port.getName()} =
     <#if !type.isPrimitive()>null<#elseif type.isIntegralType() || type.isNumericType()>0<#else>false</#if>;
 </#list>

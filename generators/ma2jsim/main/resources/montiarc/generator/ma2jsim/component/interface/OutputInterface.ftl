@@ -7,6 +7,6 @@
 interface ${ast.getName()}${suffixes.output()}<#if isTop>${suffixes.top()}</#if> <@Util.printTypeParameters ast/> {
 
   <#list ast.getSymbol().getAllOutgoingPorts() as portSym>
-    <@Util.getStaticPortInterface portSym/><<@Util.getPortTypeString portSym.getType()/>> ${prefixes.port()}${portSym.getName()}();
+    <@Util.getStaticPortInterface portSym/><<@Util.getPortTypeString helper.getComponentHelper().getPortType(ast.getSymbol(), portSym)/>> ${prefixes.port()}${portSym.getName()}();
   </#list>
 }
