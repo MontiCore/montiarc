@@ -1,0 +1,18 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.semantics.sync;
+
+import montiarc.types.OnOff;
+import montiarc.sync.automata.Inverter;
+
+// interactions stated inside a tick block imply connectors just like top-level ones:
+// inv2 only emits ON if it receives OFF from inv1
+sequencediagram TickBlockConnectsSD {
+  inv1:Inverter;
+  inv2:Inverter;
+
+  Tick {
+    -> inv1.i : trigger OnOff.ON;
+    inv1.o -> inv2.i : OnOff.OFF;
+    inv2.o -> : OnOff.ON;
+  }
+}

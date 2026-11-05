@@ -1,0 +1,18 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.semantics.sync;
+
+import montiarc.types.OnOff;
+import montiarc.sync.automata.Inverter;
+
+// a violated condition rejects the run even though all interactions are observed
+<<ticks=20, exception=java.lang.AssertionError.class>>
+sequencediagram RejectsFailingAssertSD {
+  inv:Inverter;
+
+  Tick {
+    -> inv.i : trigger OnOff.ON;
+    inv.o -> : OnOff.OFF;
+  }
+
+  assert inv.o == OnOff.ON;
+}

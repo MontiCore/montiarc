@@ -1,0 +1,27 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.sync.automata.inverter;
+
+import montiarc.types.OnOff;
+import montiarc.sync.automata.Inverter;
+
+// inv1.o between visible components, inv2.o world-facing -> free
+visible sequencediagram VisibleSD {
+  inv1:Inverter;
+  inv2:Inverter;
+
+  let OnOff input = OnOff.ON;
+
+  Tick {
+    -> inv1.i : trigger input;
+    inv1.o -> inv2.i : OnOff.OFF;
+  }
+
+  let OnOff mid = inv1.o;
+  assert input == OnOff.ON;
+  assert inv1.o == OnOff.OFF;
+  assert mid == inv1.o;
+
+  Tick {
+    inv1.o -> inv2.i : OnOff.OFF;
+  }
+}

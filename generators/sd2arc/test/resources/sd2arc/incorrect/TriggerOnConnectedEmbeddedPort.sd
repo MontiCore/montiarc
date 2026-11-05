@@ -1,0 +1,13 @@
+/* (c) https://github.com/MontiCore/monticore */
+package sd2arc.incorrect;
+
+import montiarc.types.OnOff;
+
+<<montiarc="test/resources/montiarc/SequentialComposition.arc">>
+sequencediagram TriggerOnConnectedEmbeddedPort {
+  sub1;
+  sub2;
+
+  -> sub1.i : trigger OnOff.ON;
+  -> sub2.i : trigger OnOff.ON; // connected to sub1.o
+}

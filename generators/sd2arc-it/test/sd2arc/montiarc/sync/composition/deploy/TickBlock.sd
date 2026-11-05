@@ -1,0 +1,37 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.sync.composition.deploy;
+
+import montiarc.types.OnOff;
+import montiarc.sync.automata.Inverter;
+
+complete sequencediagram TickBlock {
+  inv1:Inverter;
+  inv2:Inverter;
+  inv3:Inverter;
+
+  Tick {
+    -> inv1.i : trigger OnOff.ON;
+    inv1.o -> inv2.i : OnOff.OFF;
+    inv2.o -> inv3.i : OnOff.ON;
+    inv3.o -> : ...;
+  }
+
+  Tick {
+    inv1.o -> inv2.i : OnOff.OFF;
+    inv2.o -> inv3.i : OnOff.ON;
+    inv3.o -> : ...;
+  }
+
+  assert inv1.o == OnOff.OFF;
+
+  Tick {
+    inv1.o -> inv2.i : OnOff.OFF;
+    inv2.o -> inv3.i : OnOff.ON;
+    inv3.o -> : OnOff.OFF;
+  }
+
+  let OnOff m = inv3.o;
+
+  assert inv3.o == OnOff.OFF;
+  assert m == inv3.o;
+}

@@ -1,0 +1,19 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.semantics.timed;
+
+import montiarc.types.OnOff;
+import montiarc.timed.automata.Inverter;
+
+// visible: interactions with objects not in the diagram (the world) may be omitted,
+// all interactions between inv1 and inv2 are stated
+visible sequencediagram VisibleAllowsUnstatedWorldSD {
+  inv1:Inverter;
+  inv2:Inverter;
+
+  -> inv1.i : trigger OnOff.ON;
+  -> inv1.i : trigger OnOff.OFF;
+  -> inv1.i : trigger OnOff.ON;
+  inv1.o -> inv2.i : OnOff.OFF;
+  inv1.o -> inv2.i : OnOff.ON;
+  inv1.o -> inv2.i : OnOff.OFF;
+}

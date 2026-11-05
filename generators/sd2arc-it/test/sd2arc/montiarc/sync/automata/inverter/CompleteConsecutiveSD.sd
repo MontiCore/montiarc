@@ -1,0 +1,23 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.sync.automata.inverter;
+
+import montiarc.types.OnOff;
+import montiarc.sync.automata.Inverter;
+
+// no wrong ticks allowed between complete blocks
+complete sequencediagram CompleteConsecutiveSD {
+  inv1:Inverter;
+  inv2:Inverter;
+
+  Tick {
+    -> inv1.i : trigger OnOff.ON;
+    inv1.o -> inv2.i : OnOff.OFF;
+    inv2.o -> : OnOff.ON;
+  }
+
+  Tick {
+    -> inv1.i : trigger OnOff.ON;
+    inv1.o -> inv2.i : OnOff.OFF;
+    inv2.o -> : OnOff.ON;
+  }
+}

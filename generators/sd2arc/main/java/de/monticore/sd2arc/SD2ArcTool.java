@@ -11,6 +11,7 @@ import de.monticore.lang.sdbasis._ast.ASTSDArtifact;
 import de.monticore.sd2arc._cocos.ImpliedConnectorsFitEmbeddingComponentCoCo;
 import de.monticore.sd2arc._cocos.ObserveOnUnconnectedPortCoCo;
 import de.monticore.sd2arc._cocos.SubcomponentExistsInEmbeddingComponentCoCo;
+import de.monticore.sd2arc._cocos.TickBlockStatesConstrainedSyncPortsCoCo;
 import de.monticore.sd2arc.codegen.SDGenerator;
 import de.monticore.sd2arc.codegen.SDHelper;
 import de.monticore.sd2arc.trafo.AddAdjacentSubcomponents;
@@ -85,6 +86,7 @@ public class SD2ArcTool extends SD4ComponentsTool {
     checker.addCoCo(new SubcomponentExistsInEmbeddingComponentCoCo());
     checker.addCoCo(new ImpliedConnectorsFitEmbeddingComponentCoCo());
     checker.addCoCo(new ObserveOnUnconnectedPortCoCo());
+    checker.addCoCo(new TickBlockStatesConstrainedSyncPortsCoCo());
 
     checker.checkAll(ast);
   }

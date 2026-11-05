@@ -1,0 +1,17 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.semantics.timed;
+
+import montiarc.types.OnOff;
+import montiarc.timed.automata.Inverter;
+
+// free: the chronological order of the stated interactions has to be preserved.
+// inv1.o -> inv2.i happens before inv2.o -> world, but is stated after it.
+<<ticks=20, exception=java.lang.AssertionError.class>>
+sequencediagram FreeRejectsWrongOrderSD {
+  inv1:Inverter;
+  inv2:Inverter;
+
+  -> inv1.i : trigger OnOff.ON;
+  inv2.o -> : OnOff.ON;
+  inv1.o -> inv2.i : OnOff.OFF;
+}

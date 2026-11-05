@@ -1,0 +1,21 @@
+/* (c) https://github.com/MontiCore/monticore */
+package sd2arc.correct;
+
+import montiarc.types.OnOff;
+import montiarc.timed.Inverter;
+
+// complete: ALL port interactions must be observed, including world-facing outputs.
+// inv1.o -> inv2.i: must observe (fail if unexpected).
+// inv2.o -> world: must also observe (fail if unexpected), unlike visible mode.
+// Generated automaton: both S0 -> Failed port_inv1_o and S1 -> Failed port_inv2_o.
+complete sequencediagram CompleteSD {
+  inv1:Inverter;
+  inv2:Inverter;
+
+  -> inv1.i : trigger OnOff.ON;
+
+  Tick;
+
+  inv1.o -> inv2.i : OnOff.OFF;
+  inv2.o -> : OnOff.ON;
+}

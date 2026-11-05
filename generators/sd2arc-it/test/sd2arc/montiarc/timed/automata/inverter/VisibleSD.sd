@@ -1,0 +1,26 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.timed.automata.inverter;
+
+import montiarc.types.OnOff;
+import montiarc.timed.automata.Inverter;
+
+// visible: inv1.o -> inv2.i connects two visible components and must be observed
+// (fail transition generated for unexpected values on port_inv1_o).
+// inv2.o goes to the world (no target component) so it remains free (self-loop),
+// and is therefore not required to be observed here.
+visible sequencediagram VisibleSD {
+  inv1:Inverter;
+  inv2:Inverter;
+
+  let OnOff input = OnOff.ON;
+
+  -> inv1.i : trigger input;
+
+  inv1.o -> inv2.i : OnOff.OFF;
+  let OnOff mid = inv1.o;
+  assert input == OnOff.ON;
+  assert inv1.o == OnOff.OFF;
+  assert mid == inv1.o;
+
+  Tick;
+}

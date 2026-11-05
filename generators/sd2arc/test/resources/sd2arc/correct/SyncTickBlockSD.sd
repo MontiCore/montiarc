@@ -1,0 +1,20 @@
+/* (c) https://github.com/MontiCore/monticore */
+package sd2arc.correct;
+
+import montiarc.types.OnOff;
+import montiarc.sync.Inverter;
+
+// inv2.o is free in a visible diagram, as it is connected to the world
+visible sequencediagram SyncTickBlockSD {
+  inv1:Inverter;
+  inv2:Inverter;
+
+  Tick {
+    -> inv1.i : trigger OnOff.ON;
+    inv1.o -> inv2.i : OnOff.OFF;
+  }
+
+  Tick {
+    inv1.o -> inv2.i : ...;
+  }
+}

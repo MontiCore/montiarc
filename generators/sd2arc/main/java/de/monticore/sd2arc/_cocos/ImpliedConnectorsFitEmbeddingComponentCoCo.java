@@ -8,6 +8,7 @@ import de.monticore.lang.sdbasis._ast.ASTSequenceDiagram;
 import de.monticore.lang.sdbasis._cocos.SDBasisASTSequenceDiagramCoCo;
 import de.monticore.sd2arc.trafo.EmbeddingComponent;
 import de.monticore.sd2arc.util.SD2ArcError;
+import de.monticore.sd2arc.util.SDInteractions;
 import de.se_rwth.commons.logging.Log;
 
 import java.util.HashMap;
@@ -38,9 +39,7 @@ public class ImpliedConnectorsFitEmbeddingComponentCoCo implements SDBasisASTSeq
 
   protected Map<ASTSDPort, ASTSDPort> getImpliedConnectors(ASTSequenceDiagram diagram) {
     Map<ASTSDPort, ASTSDPort> targetSource = new HashMap<>();
-    for (ASTSDSendMessage connector : diagram.getSDBody().streamSDElements()
-      .filter(ASTSDSendMessage.class::isInstance)
-      .map(ASTSDSendMessage.class::cast)
+    for (ASTSDSendMessage connector : SDInteractions.streamSendMessages(diagram)
       .toList()) {
       if (connector.isPresentSDTarget() && connector.getSDTarget() instanceof ASTSDPort astTarget
         && connector.isPresentSDSource() && connector.getSDSource() instanceof ASTSDPort astSource) {

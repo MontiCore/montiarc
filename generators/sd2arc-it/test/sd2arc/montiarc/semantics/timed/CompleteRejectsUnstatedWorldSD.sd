@@ -1,0 +1,19 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.semantics.timed;
+
+import montiarc.types.OnOff;
+import montiarc.timed.automata.Inverter;
+
+// complete: unlike visible, interactions with the world must not be omitted either.
+// inv2.o -> world (ON) occurs between inv1.o -> inv2.i and the stated tick.
+// The same diagram as visible is accepted, see timed/automata/inverter/VisibleSD.
+<<ticks=20, exception=java.lang.AssertionError.class>>
+complete sequencediagram CompleteRejectsUnstatedWorldSD {
+  inv1:Inverter;
+  inv2:Inverter;
+
+  -> inv1.i : trigger OnOff.ON;
+  inv1.o -> inv2.i : OnOff.OFF;
+
+  Tick;
+}

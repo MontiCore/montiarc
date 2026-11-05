@@ -3,6 +3,7 @@ package montiarc.gradle.sd2arc
 
 import javax.inject.Inject
 import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
@@ -114,7 +115,7 @@ abstract class SD2ArcCompile : DefaultTask() {
       return
     }
 
-    execOps.javaexec {
+    val exec = execOps.javaexec {
       it.classpath(this.toolPath)
       it.mainClass.convention(getMainClass())
 
@@ -141,6 +142,10 @@ abstract class SD2ArcCompile : DefaultTask() {
       if (defaultTicks.isPresent) {
         it.args("--defaultTicks", defaultTicks.get())
       }
+    }
+
+    if (exec.exitValue != 0) {
+      throw GradleException("There are errors in the sequence diagrams.")
     }
   }
 

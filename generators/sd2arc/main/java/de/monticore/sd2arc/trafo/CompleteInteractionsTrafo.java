@@ -10,6 +10,7 @@ import de.monticore.lang.sdbasis._ast.ASTSDArtifact;
 import de.monticore.lang.sdbasis._ast.ASTSDSendMessage;
 import de.monticore.lang.sdbasis._ast.ASTSequenceDiagram;
 import de.monticore.lang.sdbasis._visitor.SDBasisVisitor2;
+import de.monticore.sd2arc.util.SDInteractions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -85,9 +86,7 @@ public class CompleteInteractionsTrafo implements SDBasisVisitor2 {
 
   protected Map<String, String> getImpliedConnectors() {
     Map<String, String> targetSource = new HashMap<>();
-    for (ASTSDSendMessage connector : currentDiagram.getSDBody().streamSDElements()
-      .filter(ASTSDSendMessage.class::isInstance)
-      .map(ASTSDSendMessage.class::cast)
+    for (ASTSDSendMessage connector : SDInteractions.streamSendMessages(currentDiagram)
       .toList()) {
       if (connector.isPresentSDTarget() && connector.getSDTarget() instanceof ASTSDPort astTarget
         && connector.isPresentSDSource() && connector.getSDSource() instanceof ASTSDPort astSource) {

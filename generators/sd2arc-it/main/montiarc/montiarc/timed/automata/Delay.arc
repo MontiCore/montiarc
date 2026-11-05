@@ -10,7 +10,9 @@ component Delay {
 
   <<delayed>> automaton {
 
-    initial state S;
+    initial state S {
+      entry / { o = OnOff.OFF; }
+    }
 
     S -> S i / { o = i; }
   }

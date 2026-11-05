@@ -1,0 +1,13 @@
+/* (c) https://github.com/MontiCore/monticore */
+package sd2arc.incorrect;
+
+import montiarc.types.OnOff;
+import montiarc.timed.Inverter;
+
+sequencediagram ObserveOnUnconnectedPortInTick {
+  inv:Inverter;
+
+  Tick {
+    -> inv.i : OnOff.ON;
+  }
+}

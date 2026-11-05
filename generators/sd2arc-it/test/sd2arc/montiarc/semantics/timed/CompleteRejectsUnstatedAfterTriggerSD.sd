@@ -1,0 +1,16 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.semantics.timed;
+
+import montiarc.types.OnOff;
+import montiarc.timed.automata.Inverter;
+
+// complete: the trigger is the first stated interaction. The omitted output OFF lies between
+// the trigger and the stated output ON and must reject the run.
+<<ticks=20, exception=java.lang.AssertionError.class>>
+complete sequencediagram CompleteRejectsUnstatedAfterTriggerSD {
+  inv:Inverter;
+
+  -> inv.i : trigger OnOff.ON;
+  -> inv.i : trigger OnOff.OFF;
+  inv.o -> : OnOff.ON;
+}

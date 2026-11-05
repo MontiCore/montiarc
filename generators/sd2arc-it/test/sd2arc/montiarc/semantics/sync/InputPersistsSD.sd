@@ -1,0 +1,29 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.semantics.sync;
+
+import montiarc.types.OnOff;
+import montiarc.sync.automata.Inverter;
+
+// synchronous streams carry a message in every tick: the triggered value is sent
+// in every tick until a new trigger replaces it
+complete sequencediagram InputPersistsSD {
+  inv:Inverter;
+
+  Tick {
+    -> inv.i : trigger OnOff.ON;
+    inv.o -> : OnOff.OFF;
+  }
+
+  Tick {
+    inv.o -> : OnOff.OFF;
+  }
+
+  Tick {
+    -> inv.i : trigger OnOff.OFF;
+    inv.o -> : OnOff.ON;
+  }
+
+  Tick {
+    inv.o -> : OnOff.ON;
+  }
+}

@@ -1,0 +1,14 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.semantics.timed;
+
+import montiarc.types.OnOff;
+import montiarc.timed.automata.Inverter;
+
+// complete: interactions after the last stated interaction (the output ON) are unrestricted
+complete sequencediagram CompleteAllowsSuffixSD {
+  inv:Inverter;
+
+  -> inv.i : trigger OnOff.ON;
+  -> inv.i : trigger OnOff.OFF;
+  inv.o -> : OnOff.OFF;
+}

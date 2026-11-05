@@ -9,7 +9,12 @@ sequencediagram AndSD1 {
   notB;
   nor:Nor;
 
+  // And forwards a to notA.a and notA.b, and b to notB.a and notB.b. Embedded triggers are not yet
+  // forwarded to all ports connected to the same interface port (see TODO in AssertOrderSubcomponent.ftl)
   -> notA.a : trigger true ;
+  -> notA.b : trigger true ;
+  -> notB.a : trigger true ;
+  -> notB.b : trigger true ;
   notA.q -> nor.a : false ;
   nor.q -> : ... ;
 

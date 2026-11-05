@@ -1,0 +1,26 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.semantics.sync;
+
+import montiarc.types.OnOff;
+import montiarc.sync.automata.Source;
+
+// complete: src.o carries a message in every tick. The second tick does not match
+// the second tick block, so its message of src.o is an omitted interaction.
+<<ticks=20, exception=java.lang.AssertionError.class>>
+sequencediagram CompleteRejectsUnmatchedTickSD {
+  complete src:Source;
+  d1:montiarc.sync.automata.Delay;
+  d2:montiarc.sync.automata.Delay;
+
+  Tick {
+    src.o -> d1.i : OnOff.ON;
+    d1.o -> d2.i : OnOff.OFF;
+    d2.o -> : OnOff.OFF;
+  }
+
+  // d2.o is OFF in the second tick and ON in the third
+  Tick {
+    src.o -> d1.i : OnOff.ON;
+    d2.o -> : OnOff.ON;
+  }
+}

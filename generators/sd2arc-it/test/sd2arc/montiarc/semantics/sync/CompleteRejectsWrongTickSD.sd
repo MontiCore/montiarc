@@ -1,0 +1,21 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.semantics.sync;
+
+import montiarc.types.OnOff;
+import montiarc.sync.automata.Inverter;
+
+// complete: consecutive tick blocks may not be interleaved with other ticks,
+// inv keeps emitting OFF in the second tick
+<<ticks=20, exception=java.lang.AssertionError.class>>
+complete sequencediagram CompleteRejectsWrongTickSD {
+  inv:Inverter;
+
+  Tick {
+    -> inv.i : trigger OnOff.ON;
+    inv.o -> : OnOff.OFF;
+  }
+
+  Tick {
+    inv.o -> : OnOff.ON;
+  }
+}

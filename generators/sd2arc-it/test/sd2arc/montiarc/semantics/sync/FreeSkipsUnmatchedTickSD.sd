@@ -1,0 +1,24 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.semantics.sync;
+
+import montiarc.types.OnOff;
+import montiarc.sync.automata.Source;
+
+// free: ticks that do not match the next tick block may be omitted
+sequencediagram FreeSkipsUnmatchedTickSD {
+  src:Source;
+  d1:montiarc.sync.automata.Delay;
+  d2:montiarc.sync.automata.Delay;
+
+  Tick {
+    src.o -> d1.i : OnOff.ON;
+    d1.o -> d2.i : OnOff.OFF;
+    d2.o -> : OnOff.OFF;
+  }
+
+  // d2.o is OFF in the second tick and ON in the third
+  Tick {
+    src.o -> d1.i : OnOff.ON;
+    d2.o -> : OnOff.ON;
+  }
+}

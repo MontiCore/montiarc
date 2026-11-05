@@ -1,0 +1,16 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.semantics.sync;
+
+import montiarc.types.OnOff;
+import montiarc.sync.automata.Inverter;
+
+// free: every stated interaction has to occur, inv never emits ON
+<<ticks=20, exception=java.lang.AssertionError.class>>
+sequencediagram FreeRejectsMissingSD {
+  inv:Inverter;
+
+  Tick {
+    -> inv.i : trigger OnOff.ON;
+    inv.o -> : OnOff.ON;
+  }
+}

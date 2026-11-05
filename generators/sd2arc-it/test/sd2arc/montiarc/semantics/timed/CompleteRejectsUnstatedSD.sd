@@ -1,0 +1,18 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.semantics.timed;
+
+import montiarc.types.OnOff;
+import montiarc.timed.automata.Inverter;
+
+// complete: between the first and last stated interaction, no other interaction of inv may occur.
+// The omitted output ON lies in between and must reject the run.
+<<ticks=20, exception=java.lang.AssertionError.class>>
+complete sequencediagram CompleteRejectsUnstatedSD {
+  inv:Inverter;
+
+  -> inv.i : trigger OnOff.ON;
+  -> inv.i : trigger OnOff.OFF;
+  -> inv.i : trigger OnOff.ON;
+  inv.o -> : OnOff.OFF;
+  inv.o -> : OnOff.OFF;
+}

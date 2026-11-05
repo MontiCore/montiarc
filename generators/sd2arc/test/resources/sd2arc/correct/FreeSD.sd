@@ -1,0 +1,18 @@
+/* (c) https://github.com/MontiCore/monticore */
+package sd2arc.correct;
+
+import montiarc.types.OnOff;
+import montiarc.timed.Inverter;
+
+// free (default): unobserved ports get self-loop transitions in the generated automaton.
+// inv2.o is not observed here -> AssertOrder__ generates S0 -> S0 port_inv2_o (self-loop).
+sequencediagram FreeSD {
+  inv1:Inverter;
+  inv2:Inverter;
+
+  -> inv1.i : trigger OnOff.ON;
+
+  Tick;
+
+  inv1.o -> inv2.i : OnOff.OFF;
+}

@@ -1,0 +1,25 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.timed.automata.inverter;
+
+import montiarc.types.OnOff;
+import montiarc.timed.automata.Inverter;
+
+// free (default): inv2.o is not observed.
+// The generated automaton uses a self-loop on port_inv2_o at every state,
+// so the test passes even though inv2.o fires with OnOff.ON during execution.
+sequencediagram FreeSD {
+  inv1:Inverter;
+  inv2:Inverter;
+
+  let OnOff input = OnOff.ON;
+
+  -> inv1.i : trigger input;
+
+  inv1.o -> inv2.i : OnOff.OFF;
+  let OnOff mid = inv1.o;
+  assert input == OnOff.ON;
+  assert inv1.o == OnOff.OFF;
+  assert mid == inv1.o;
+
+  Tick;
+}

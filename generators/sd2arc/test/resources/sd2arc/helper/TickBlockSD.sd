@@ -1,0 +1,16 @@
+/* (c) https://github.com/MontiCore/monticore */
+package sd2arc.helper;
+
+import montiarc.types.OnOff;
+import montiarc.timed.Inverter;
+
+<<ticks=5, exception=java.lang.AssertionError.class, oracle=random>>
+complete sequencediagram TickBlockSD {
+  inv1:Inverter;
+  inv2:Inverter;
+
+  Tick {
+    -> inv1.i : trigger OnOff.ON;
+    inv1.o -> inv2.i : OnOff.OFF;
+  }
+}

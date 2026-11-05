@@ -1,0 +1,14 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.semantics.timed;
+
+import montiarc.types.OnOff;
+import montiarc.timed.automata.Inverter;
+
+// free: the first output (OFF) after the trigger may be omitted
+sequencediagram FreeSkipsUnstatedAfterTriggerSD {
+  inv:Inverter;
+
+  -> inv.i : trigger OnOff.ON;
+  -> inv.i : trigger OnOff.OFF;
+  inv.o -> : OnOff.ON;
+}

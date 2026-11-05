@@ -9,6 +9,7 @@ import de.monticore.lang.sdbasis._ast.ASTSequenceDiagram;
 import de.monticore.lang.sdbasis._cocos.SDBasisASTSequenceDiagramCoCo;
 import de.monticore.sd2arc.trafo.EmbeddingComponent;
 import de.monticore.sd2arc.util.SD2ArcError;
+import de.monticore.sd2arc.util.SDInteractions;
 import de.se_rwth.commons.logging.Log;
 
 import java.util.HashSet;
@@ -23,9 +24,7 @@ public class ObserveOnUnconnectedPortCoCo implements SDBasisASTSequenceDiagramCo
 
   @Override
   public void check(ASTSequenceDiagram node) {
-    List<ASTSDPort> targets = node.getSDBody().streamSDElements()
-      .filter(ASTSDSendMessage.class::isInstance)
-      .map(ASTSDSendMessage.class::cast)
+    List<ASTSDPort> targets = SDInteractions.streamSendMessages(node)
       .filter(e -> !(e.getSDAction() instanceof ASTSDMessage message) || !message.isTrigger())
       .filter(ASTSDSendMessage::isPresentSDTarget)
       .map(ASTSDSendMessage::getSDTarget)
@@ -49,9 +48,7 @@ public class ObserveOnUnconnectedPortCoCo implements SDBasisASTSequenceDiagramCo
 
     // Get implied connectors
     Set<String> targets = new HashSet<>();
-    for (ASTSDSendMessage connector : node.getSDBody().streamSDElements()
-      .filter(ASTSDSendMessage.class::isInstance)
-      .map(ASTSDSendMessage.class::cast)
+    for (ASTSDSendMessage connector : SDInteractions.streamSendMessages(node)
       .toList()) {
       if (connector.isPresentSDTarget() && connector.getSDTarget() instanceof ASTSDPort astTarget
         && connector.isPresentSDSource() && connector.getSDSource() instanceof ASTSDPort) {

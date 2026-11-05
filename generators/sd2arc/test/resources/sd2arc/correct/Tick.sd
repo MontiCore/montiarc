@@ -1,0 +1,32 @@
+/* (c) https://github.com/MontiCore/monticore */
+package sd2arc.correct;
+
+import montiarc.types.OnOff;
+import montiarc.timed.Inverter;
+
+complete sequencediagram Tick {
+  inv1:Inverter;
+  inv2:Inverter;
+  inv3:Inverter;
+
+  -> inv1.i : trigger OnOff.ON;
+
+  Tick;
+
+  inv1.o -> inv2.i : OnOff.OFF;
+
+  Tick;
+
+  inv2.o -> inv3.i : OnOff.ON;
+
+  Tick;
+
+  inv3.o -> : ...;
+
+  Tick;
+
+  let OnOff m = inv3.o;
+
+  assert inv3.o == OnOff.OFF;
+  assert m == inv3.o;
+}

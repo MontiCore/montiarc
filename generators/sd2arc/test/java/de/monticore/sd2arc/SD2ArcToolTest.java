@@ -6,6 +6,8 @@ import de.monticore.io.paths.MCPath;
 import de.monticore.lang.sd4components.SD4ComponentsMill;
 import de.monticore.lang.sd4components._ast.ASTSDVariableDeclaration;
 import de.monticore.lang.sdbasis._ast.ASTSDArtifact;
+import de.monticore.lang.sdbasis._ast.ASTSequenceDiagram;
+import de.monticore.sd2arc.codegen.SDHelper;
 import de.monticore.sd2arc.util.SD2ArcError;
 import de.se_rwth.commons.logging.Log;
 import org.junit.jupiter.api.Assertions;
@@ -13,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -91,6 +94,43 @@ public class SD2ArcToolTest extends SD2ArcTestBase {
     Assertions.assertEquals(1, ast.getMCImportStatementList().size());
   }
 
+  protected ASTSequenceDiagram parseHelperSD(String model) {
+    SD2ArcTool tool = new SD2ArcTool();
+    tool.init();
+    tool.initGlobalScope();
+    tool.initBuiltInSymbols();
+    Log.enableFailQuick(false);
+
+    ASTSDArtifact ast = tool.parse(SYMBOL_PATH + "/sd2arc/helper/" + model);
+    Assertions.assertNotNull(ast, Log.getFindings().toString());
+    return ast.getSequenceDiagram();
+  }
+
+  @Test
+  public void shouldImplyConnectorsOfTickBlocks() {
+    ASTSequenceDiagram sd = parseHelperSD("TickBlockSD.sd");
+
+    Assertions.assertEquals(Map.of("inv2.i", "inv1.o"), new SDHelper().getImpliedConnectors(sd));
+  }
+
+  @Test
+  public void shouldRestrictFromStartIfTriggerIsFirstInteraction() {
+    SDHelper helper = new SDHelper();
+
+    Assertions.assertTrue(helper.isRestrictedFromStart(parseHelperSD("TickBlockSD.sd")));
+    Assertions.assertFalse(helper.isRestrictedFromStart(parseHelperSD("ObserveFirstSD.sd")));
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"TickBlockSD.sd", "QuotedStereotypesSD.sd"})
+  public void shouldPassTestConfigurationStereotypesAsExpressions(String model) {
+    Map<String, String> stereotypes = new SDHelper().getStereotypes(parseHelperSD(model));
+
+    Assertions.assertEquals("5", stereotypes.get("ticks"));
+    Assertions.assertEquals("[java.lang.AssertionError.class]", stereotypes.get("exception"));
+    Assertions.assertEquals("\"random\"", stereotypes.get("oracle"));
+  }
+
   @ParameterizedTest
   @MethodSource("provideIncorrectAndErrorCodes")
   public void toolCocosOnlyExpectedErrorTest(String model, String[] errors) {
@@ -117,7 +157,13 @@ public class SD2ArcToolTest extends SD2ArcTestBase {
       Arguments.of("ImpliedConnectorsFitEmbeddingComponent.sd", new String[]{SD2ArcError.IMPLIED_CONNECTORS_FIT.getErrorCode()}),
       Arguments.of("ObserveOnUnconnectedPort.sd", new String[]{SD2ArcError.OBSERVE_ON_UNCONNECTED_PORT.getErrorCode()}),
       Arguments.of("ObserveOnUnconnectedPortEmbedded.sd", new String[]{SD2ArcError.OBSERVE_ON_UNCONNECTED_PORT.getErrorCode()}),
-      Arguments.of("SubcomponentExistsInEmbeddingComponent.sd", new String[]{SD2ArcError.SUBCOMPONENT_NOT_EXISTS.getErrorCode()})
+      Arguments.of("ObserveOnUnconnectedPortInTick.sd", new String[]{SD2ArcError.OBSERVE_ON_UNCONNECTED_PORT.getErrorCode()}),
+      Arguments.of("SubcomponentExistsInEmbeddingComponent.sd", new String[]{SD2ArcError.SUBCOMPONENT_NOT_EXISTS.getErrorCode()}),
+      Arguments.of("TickBlockOmitsSyncPort.sd", new String[]{
+        SD2ArcError.TICK_BLOCK_OMITS_SYNC_PORT.getErrorCode(),
+        SD2ArcError.TICK_BLOCK_OMITS_SYNC_PORT.getErrorCode(),
+        SD2ArcError.TICK_BLOCK_OMITS_SYNC_PORT.getErrorCode()}),
+      Arguments.of("TriggerOnConnectedEmbeddedPort.sd", new String[]{"0xB5006"})
     );
   }
 }

@@ -1,0 +1,19 @@
+/* (c) https://github.com/MontiCore/monticore */
+package sd2arc.correct;
+
+import montiarc.types.OnOff;
+import montiarc.timed.Inverter;
+
+// visible: unobserved ports between visible components get fail transitions.
+// world-facing ports (inv2.o has no target) remain free (self-loop).
+// inv1.o -> inv2.i is between two visible components -> S0 -> Failed port_inv1_o if not observed.
+visible sequencediagram VisibleSD {
+  inv1:Inverter;
+  inv2:Inverter;
+
+  -> inv1.i : trigger OnOff.ON;
+
+  Tick;
+
+  inv1.o -> inv2.i : OnOff.OFF;
+}

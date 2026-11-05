@@ -12,7 +12,8 @@ import montiarc.util.Error;
 public enum SD2ArcError implements Error {
   SUBCOMPONENT_NOT_EXISTS("0xB5100", "Subcomponent '%s' does not exist in the embedding component '%s'"),
   IMPLIED_CONNECTORS_FIT("0xB5101", "Implied connector from '%s' to '%s' does not fit"),
-  OBSERVE_ON_UNCONNECTED_PORT("0xB5102", "Cannot observe on unconnected port '%s'");
+  OBSERVE_ON_UNCONNECTED_PORT("0xB5102", "Cannot observe on unconnected port '%s'"),
+  TICK_BLOCK_OMITS_SYNC_PORT("0xB5103", "The tick block does not state the synchronous port '%s', which carries a message in every tick and may not be omitted");
 
   private final String errorCode;
   private final String errorMsgFormat;

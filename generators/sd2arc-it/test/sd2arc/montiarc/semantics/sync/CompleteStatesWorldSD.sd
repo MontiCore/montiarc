@@ -1,0 +1,22 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.semantics.sync;
+
+import montiarc.types.OnOff;
+import montiarc.sync.automata.Inverter;
+
+// complete: synchronous ports carry a message in every tick, hence every tick block states all ports
+complete sequencediagram CompleteStatesWorldSD {
+  inv1:Inverter;
+  inv2:Inverter;
+
+  Tick {
+    -> inv1.i : trigger OnOff.ON;
+    inv1.o -> inv2.i : OnOff.OFF;
+    inv2.o -> : OnOff.ON;
+  }
+
+  Tick {
+    inv1.o -> inv2.i : OnOff.OFF;
+    inv2.o -> : OnOff.ON;
+  }
+}

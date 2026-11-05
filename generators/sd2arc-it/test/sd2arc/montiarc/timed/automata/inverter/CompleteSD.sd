@@ -1,0 +1,31 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.timed.automata.inverter;
+
+import montiarc.types.OnOff;
+import montiarc.timed.automata.Inverter;
+
+// complete: ALL port interactions must be observed, including world-facing outputs.
+// Both inv1.o -> inv2.i and inv2.o -> world are observed.
+// The generated automaton produces fail transitions for any unobserved port at any state
+// (S0 -> Failed port_inv2_o, S1 -> Failed port_inv1_o).
+complete sequencediagram CompleteSD {
+  inv1:Inverter;
+  inv2:Inverter;
+
+  let OnOff input = OnOff.ON;
+
+  -> inv1.i : trigger input;
+
+  inv1.o -> inv2.i : OnOff.OFF;
+  let OnOff mid = inv1.o;
+  inv2.o -> : OnOff.ON;
+  let OnOff out = inv2.o;
+  assert input == OnOff.ON;
+  assert inv1.o == OnOff.OFF;
+  assert mid == inv1.o;
+  assert inv2.o == OnOff.ON;
+  assert out == inv2.o;
+  assert out == input;
+
+  Tick;
+}
