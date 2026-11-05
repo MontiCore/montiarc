@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../../assets/images/icon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
@@ -30,7 +30,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.57a0d79d.min.css">
       
       
 
@@ -3019,6 +3019,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Test">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ticks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ticks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3071,6 +3099,17 @@
     <span class="md-ellipsis">
       
         Visible
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#synchronous-ports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synchronous ports
       
     </span>
   </a>
@@ -3482,6 +3521,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Test">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ticks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ticks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3540,6 +3607,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#synchronous-ports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synchronous ports
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3576,76 +3654,161 @@ For a detailed definition of sequence diagrams, read <a href="https://link.sprin
 <center>
 <p><img alt="EmitterAsserterOverview" src="../../../assets/images/SequenceDiagram.png" width="600" /></p>
 </center>
-<div class="highlight"><pre><span></span><code>sequencediagram SD1 {
-  emitterA;
-  and:And;
-
-  emitterA.out -&gt; and.a : true;
-  -&gt; and.b : ...;
-  and.out -&gt; : false;
-  assert (emitterA.out &amp;&amp; and.b) == and.q;
-}
-</code></pre></div>
+<p>For every sequence diagram, SD2Arc generates a MontiArc test component. It contains the
+components of the diagram and an observer that stimulates them, observes their interactions, and
+fails the test if the observed run does not match the diagram.</p>
 <h2 id="test">Test<a class="headerlink" href="#test" title="Permanent link">&para;</a></h2>
 <p>Sequence diagrams have a package and a name like any other model in MontiArc.
-A sequence diagram starts with the listing of actors included in the sequence.
+A sequence diagram starts with the listing of components included in the sequence.
 This is a list of names and optionally a type. For tests that stand on their own
-the type is always required. 
+the type is always required.
 Next comes a list of interactions that have a source and target port and a message.
-If the source is omitted, the message is sent by the test coordinator.</p>
+Interactions between two components imply a connector between the respective ports.</p>
+<p>Messages from the test environment omit the source and are marked with the <code>trigger</code> keyword.
+They are sent by the observer to stimulate the components. Interactions without a source and
+without <code>trigger</code> are observations of a connector and therefore require the target port to be
+connected; otherwise the tool reports an error.
+Messages to the test environment omit the target.</p>
 <p>A test is considered successful if all interactions with the specified values
-were observed, and no assertions have failed.</p>
+were observed in the specified order, and no assertions have failed.</p>
 <p>Given the following example. The test inputs <code>true</code> and <code>false</code> to the respective
 ports and asserts that an outgoing message <code>false</code> is observed.
-All of this should occur in one tick as specified by <code>&lt;&lt;ticks=1&gt;&gt;</code>.</p>
+All of this should occur within one tick as specified by <code>&lt;&lt;ticks=1&gt;&gt;</code>.</p>
 <div class="highlight"><pre><span></span><code>package a.b;
 
 &lt;&lt;ticks=1&gt;&gt;
 complete sequencediagram AndScenario01Test {
   and:And;
 
-  -&gt; and.a : true;
-  -&gt; and.b : false;
-  and.out -&gt; : false;
+  -&gt; and.a : trigger true;
+  -&gt; and.b : trigger false;
+  and.q -&gt; : false;
 }
 </code></pre></div>
 <p>If a message value is not of interest or is unknown <code>...</code> can be used.
 Then only that the interaction occurs is asserted, but not its value.</p>
 <p>The last message of a port can always be referenced in expressions.
-Variables can be created at any point using the <code>var</code> keyword.
-Like <code>assert</code> statements, <code>var</code> statements are executed directly after
+Variables can be created at any point using the <code>let</code> keyword.
+Like <code>assert</code> statements, <code>let</code> statements are executed directly after
 the previous interaction has been observed.</p>
 <div class="highlight"><pre><span></span><code>package a.b;
 
 complete sequencediagram AndScenario02Test {
   and:And;
 
-  -&gt; and.a : true;
-  -&gt; and.b : true;
-  and.out -&gt; : ...; // Ignored
-  var boolean outFirst = and.out; // outFirst = true
+  -&gt; and.a : trigger true;
+  -&gt; and.b : trigger true;
+  and.q -&gt; : ...;                  // Ignored
+  let boolean qFirst = and.q;      // qFirst = true
 
-  -&gt; and.a : outFirst; // true
-  -&gt; and.b : and.out;  // true
-  and.out -&gt; : ...;    // Ignored
-  assert and.out;      // assert last and.out == true
+  -&gt; and.a : trigger qFirst;       // true
+  -&gt; and.b : trigger and.q;        // true
+  and.q -&gt; : ...;                  // Ignored
+  assert and.q;                    // assert last and.q == true
 }
 </code></pre></div>
-<p>Using multiple components and different <a href="#semantics">semantics</a> allows the
-the specification of complex scenarios or requirements.</p>
+<h3 id="ticks">Ticks<a class="headerlink" href="#ticks" title="Permanent link">&para;</a></h3>
+<p><code>Tick;</code> denotes the passing of time, i.e., the end of a time slice.
+Interactions stated before a tick have to occur in that time slice, interactions after it in a later one.
+Hence, a component that reacts without delay answers before the tick, while a delayed component
+answers after it.</p>
+<p>For components with synchronous ports, a tick block <code>Tick { ... }</code> groups the interactions that occur
+within the same tick. Triggers of a tick block are sent at the start of that tick.
+As a synchronous stream carries a message in every tick, the test keeps sending the last triggered
+value of a synchronous port in every following tick until a new trigger replaces it.</p>
+<div class="highlight"><pre><span></span><code>package a.b;
+
+import montiarc.types.OnOff;
+
+complete sequencediagram InverterChainTest {
+  inv1:Inverter;
+  inv2:Inverter;
+
+  Tick {
+    -&gt; inv1.i : trigger OnOff.ON;
+    inv1.o -&gt; inv2.i : OnOff.OFF;
+    inv2.o -&gt; : OnOff.ON;
+  }
+
+  Tick {                            // inv1.i still receives ON
+    inv1.o -&gt; inv2.i : OnOff.OFF;
+    inv2.o -&gt; : OnOff.ON;
+  }
+
+  Tick {
+    -&gt; inv1.i : trigger OnOff.OFF;
+    inv1.o -&gt; inv2.i : OnOff.ON;
+    inv2.o -&gt; : OnOff.OFF;
+  }
+}
+</code></pre></div>
+<h3 id="test-configuration">Test configuration<a class="headerlink" href="#test-configuration" title="Permanent link">&para;</a></h3>
+<p>The stereotype of a sequence diagram configures the generated test, e.g., <code>&lt;&lt;ticks=5&gt;&gt;</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Stereotype</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ticks</code></td>
+<td><code>9999</code> (see <code>defaultTicks</code>)</td>
+<td>The maximum number of ticks the test is simulated. If the diagram has not been matched completely in the last tick, the test fails.</td>
+</tr>
+<tr>
+<td><code>exception</code></td>
+<td><em>(none)</em></td>
+<td>The exception the test is expected to throw, e.g., <code>exception=java.lang.AssertionError.class</code> for a diagram that the system must <strong>not</strong> fulfill.</td>
+</tr>
+<tr>
+<td><code>simulatedTickLength</code></td>
+<td><code>0</code></td>
+<td>The simulated time of a tick in nanoseconds.</td>
+</tr>
+<tr>
+<td><code>montiarc</code></td>
+<td><em>(none)</em></td>
+<td>The path to a decomposed component to <a href="#embedded">embed</a> the diagram in, given as string.</td>
+</tr>
+</tbody>
+</table>
+<p>A diagram that a system must violate can therefore be expressed as a test, too:</p>
+<div class="highlight"><pre><span></span><code>package a.b;
+
+&lt;&lt;ticks=5, exception=java.lang.AssertionError.class&gt;&gt;
+sequencediagram AndNeverOutputsTrue {
+  and:And;
+
+  -&gt; and.a : trigger true;
+  -&gt; and.b : trigger false;
+  and.q -&gt; : true;
+}
+</code></pre></div>
 <h2 id="embedded">Embedded<a class="headerlink" href="#embedded" title="Permanent link">&para;</a></h2>
 <p>Another possible way to use sequence diagrams is to specify an existing architecture.
-For that, an existing decomposed MontiArc model has to be specified for which an 
-interaction between the subcomponents can be modeled.</p>
+For that, an existing decomposed MontiArc model has to be specified for which an
+interaction between the subcomponents can be modeled.
+The types of the components and the connectors are taken from the embedding component.
+Subcomponents adjacent to the stated ones are added to the test as free components that are not part
+of the diagram. Their interactions with stated <code>complete</code> or <code>visible</code> components are still checked.
+Connectors from incoming ports of the embedding component are removed,
+so the test has to stimulate each subcomponent port that would be fed by it.</p>
 <div class="highlight"><pre><span></span><code>&lt;&lt;montiarc="path/to/And.arc"&gt;&gt;
 sequencediagram AndSD1 {
   visible notA;
   notB;
   nor:Nor;
 
-  -&gt; notA.a : trigger true ;
-  notA.q -&gt; nor.a : false ;
-  nor.q -&gt; : ... ;
+  // And forwards a to notA.a and notA.b, and b to notB.a and notB.b
+  -&gt; notA.a : trigger true;
+  -&gt; notA.b : trigger true;
+  -&gt; notB.a : trigger true;
+  -&gt; notB.b : trigger true;
+  notA.q -&gt; nor.a : false;
+  nor.q -&gt; : ...;
 
   assert (notA.a &amp;&amp; notB.b) == nor.q;
 }
@@ -3654,26 +3817,44 @@ sequencediagram AndSD1 {
 <p>We have previously said that C&amp;C sequence diagrams are exemplary. This means the modeled
 interaction can occur once, multiple times at any frequency, concurrently, or never.
 Furthermore, a sequence diagram can be an abstraction of the real execution by omitting
-components and interactions. How a sequence diagram models executions can be controlled with matching stereotypes, which can alter the semantics. We define three different
-interpretations for sequence diagrams, known from UML sequence diagrams defined by <a href="https://link.springer.com/book/10.1007/978-3-319-33933-7">Modeling with UML</a>. 
+components and interactions. How a sequence diagram models executions can be controlled with
+matching stereotypes, which can alter the semantics. We define three different
+interpretations for sequence diagrams, known from UML sequence diagrams defined by <a href="https://link.springer.com/book/10.1007/978-3-319-33933-7">Modeling with UML</a>.
 They can be applied to the whole model and to individual components,
 where applying them to the whole model is equal to applying them to each component
 individually. In the graphical notation, the name can be prefixed with a stereotype to
 indicate that it should be interpreted correspondingly. In the textual notation, keywords
 are used for this purpose.</p>
+<p>Independent of the interpretation, the stated interactions have to occur in the stated order.
+The restrictions of <code>complete</code> and <code>visible</code> only hold between the first and the last stated
+interaction; before and after, any interaction may occur.
+A trigger is an interaction, too. If a diagram starts with a trigger, the restrictions hold right after it.</p>
 <h4 id="free">Free<a class="headerlink" href="#free" title="Permanent link">&para;</a></h4>
 <p>This is the default interpretation and allows any interaction or component to be
 omitted. The stereotype is <code>«match:free»</code> and the keyword is <code>free</code> or <code>...</code>.</p>
 <h4 id="complete">Complete<a class="headerlink" href="#complete" title="Permanent link">&para;</a></h4>
 <p>The opposite of free. No interaction displayed in the timeframe can be omitted,
-and all interactions that occur must be included in the model. Interactions outside the
-timeframe, that is, interactions before and after the first and last interaction on a timeline,
-can still occur and be omitted from the model. The stereotype is <code>«match:complete»</code>
-and the keyword is <code>complete</code>.</p>
+and all interactions that occur must be included in the model. This includes interactions
+with the test environment, i.e., outgoing messages that are not received by a stated component.
+Interactions outside the timeframe, that is, interactions before and after the first and last
+interaction on a timeline, can still occur and be omitted from the model. The stereotype is
+<code>«match:complete»</code> and the keyword is <code>complete</code>.</p>
 <h4 id="visible">Visible<a class="headerlink" href="#visible" title="Permanent link">&para;</a></h4>
-<p>Similar to complete, but interactions with components not included in the diagram can be omitted. Interactions between components included in the model, i.e., visible
-components, have to be complete. The stereotype is <code>«match:visible»</code> and the keyword
+<p>Similar to complete, but interactions with components not included in the diagram, including the
+test environment, can be omitted. Interactions between components included in the model, i.e.,
+visible components, have to be complete. The stereotype is <code>«match:visible»</code> and the keyword
 is <code>visible</code>.</p>
+<h4 id="synchronous-ports">Synchronous ports<a class="headerlink" href="#synchronous-ports" title="Permanent link">&para;</a></h4>
+<p>A synchronous port carries a message in every tick. Hence, every tick block has to state each
+synchronous outgoing port whose interactions may not be omitted, i.e., ports of <code>complete</code>
+components and ports between <code>visible</code> components. Otherwise, the tool reports an error, as the
+diagram could never be fulfilled. This includes empty tick blocks (<code>Tick;</code>).
+For the same reason, once the first interaction has been observed, every tick has to match the next
+tick block if the diagram contains such a port; deviating ticks cannot be omitted.</p>
+<div class="admonition note">
+<p class="admonition-title">Limitations</p>
+<p>The interpretation <code>«match:initial»</code> from Modeling with UML is not supported.</p>
+</div>
 
 
 
@@ -3795,10 +3976,10 @@ is <code>visible</code>.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.footer", "navigation.instant", "navigation.instant.progress", "navigation.indexes", "toc.follow", "content.tabs.link", "social", "content.code.copy", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.footer", "navigation.instant", "navigation.instant.progress", "navigation.indexes", "toc.follow", "content.tabs.link", "social", "content.code.copy", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.c21346df.min.js"></script>
       
     
   </body>
