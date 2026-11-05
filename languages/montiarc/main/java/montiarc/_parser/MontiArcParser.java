@@ -8,7 +8,6 @@ import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.MontiArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.io.IOException;
 import java.util.Optional;
 
 /**
