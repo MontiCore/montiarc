@@ -156,12 +156,16 @@ jobs:
       - name: Compress build for Linux
         if: matrix.target == 'Linux'
         run: tar czf MontiArc-${{ steps.extract_version.outputs.version }}${{ matrix.asset_extension }} MontiArc
-      - name: Rename for Debian
-        if: matrix.target == 'Debian'
-        run: mv montiarc_${{ steps.extract_version.outputs.version }}-1_amd64${{ matrix.asset_extension }} MontiArc-${{ steps.extract_version.outputs.version }}${{ matrix.asset_extension }}
-      - name: Rename for Fedora
-        if: matrix.target == 'Fedora'
-        run: mv montiarc-${{ steps.extract_version.outputs.version }}-1.x86_64${{ matrix.asset_extension }} MontiArc-${{ steps.extract_version.outputs.version }}${{ matrix.asset_extension }}
+      - name: Rename for Debian / Fedora
+        if: matrix.target == 'Debian' || matrix.target == 'Fedora'
+        shell: bash
+        run: |
+          shopt -s nullglob
+          files=( montiarc[-_]*${{ matrix.asset_extension }} )
+          if [ ${#files[@]} -ne 1 ]; then
+            echo "Expected exactly one package, found ${#files[@]}:"; ls -la; exit 1
+          fi
+          mv "${files[0]}" MontiArc-${{ steps.extract_version.outputs.version }}${{ matrix.asset_extension }}
       - name: Package Jar
         if: matrix.target == 'Jar'
         run: mv generators/ma2jsim/build/libs/MontiArcSimulator.jar MontiArc-${{ steps.extract_version.outputs.version }}.jar
