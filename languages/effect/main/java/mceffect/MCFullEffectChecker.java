@@ -16,7 +16,6 @@ import mceffect.graph.EffectGraph;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -77,12 +76,7 @@ public class MCFullEffectChecker {
 
   public static ASTMCEffect parseEffect(String path) {
     Optional<ASTMCEffect> ast = Optional.empty();
-    try {
-      ast = new MCEffectParser().parse(path);
-    } catch (IOException e) {
-      Log.error("Unable to parse the effect file.\n" + e.getMessage());
-      assert false;
-    }
+    ast = new MCEffectParser().parse(path);
      assert  ast.isPresent();
     return ast.get();
   }

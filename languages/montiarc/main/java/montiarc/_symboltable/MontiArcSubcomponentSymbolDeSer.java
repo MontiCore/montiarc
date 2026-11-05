@@ -10,7 +10,6 @@ import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbolDeSer;
 import de.monticore.symboltable.serialization.json.JsonObject;
 import montiarc.MontiArcMill;
 
-import java.io.IOException;
 import java.util.Optional;
 
 /**
@@ -23,11 +22,7 @@ public class MontiArcSubcomponentSymbolDeSer extends SubcomponentSymbolDeSer {
   protected final ComponentArgumentsDeSer argumentsDeSer = new ComponentArgumentsDeSer(this::parse);
 
   protected Optional<ASTExpression> parse(String expression) {
-    try {
-      return MontiArcMill.parser().parse_StringExpression(expression);
-    } catch (IOException e) {
-      return Optional.empty();
-    }
+    return MontiArcMill.parser().parse_StringExpression(expression);
   }
 
   @Override

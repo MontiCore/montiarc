@@ -75,13 +75,9 @@ class TupleTypeCheckTest extends MontiArcTestBase {
         "  int i = 0;" +
         "}"
     );
-    try {
-      ASTExpression ast = MontiArcMill.parser().parse_StringExpression(expression).orElseThrow();
-      new TransitiveScopeSetter().setScope(ast, compilationUnit.getArcComponentType().getSpannedScope());
-      return ast;
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    ASTExpression ast = MontiArcMill.parser().parse_StringExpression(expression).orElseThrow();
+    new TransitiveScopeSetter().setScope(ast, compilationUnit.getArcComponentType().getSpannedScope());
+    return ast;
   }
 
   private static Stream<Arguments> tupleIndexAccesses() {

@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
-import java.io.IOException;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -57,11 +56,7 @@ public abstract class EffectTestBase extends ATestBase {
 
   public ASTMCEffect parseEffect(String path) {
     Optional<ASTMCEffect> ast;
-    try {
-      ast = new MCEffectParser().parse(path);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    ast = new MCEffectParser().parse(path);
     Assertions.assertTrue(ast.isPresent());
     return ast.get();
   }

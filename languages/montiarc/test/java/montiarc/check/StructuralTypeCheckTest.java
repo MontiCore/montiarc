@@ -19,7 +19,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -122,13 +121,9 @@ class StructuralTypeCheckTest extends MontiArcTestBase {
         "  double y = 0.0;" +
         "}"
     );
-    try {
-      ASTExpression ast = MontiArcMill.parser().parse_StringExpression(expression).orElseThrow();
-      new TransitiveScopeSetter().setScope(ast, compilationUnit.getArcComponentType().getSpannedScope());
-      return ast;
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    ASTExpression ast = MontiArcMill.parser().parse_StringExpression(expression).orElseThrow();
+    new TransitiveScopeSetter().setScope(ast, compilationUnit.getArcComponentType().getSpannedScope());
+    return ast;
   }
 
   private static Stream<Arguments> structuralPortTypes() {

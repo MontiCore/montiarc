@@ -14,7 +14,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
@@ -31,11 +30,7 @@ public class ParserTest extends MontiArcTestBase {
 
     MontiArcParser parser = MontiArcMill.parser();
     Optional<ASTMACompilationUnit> optAst;
-    try {
-      optAst = parser.parse(relativeFilePath);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    optAst = parser.parse(relativeFilePath);
     Assertions.assertEquals(expParserErrors, parser.hasErrors(), Log.getFindings().toString());
     Assertions.assertEquals(!expParserErrors, optAst.isPresent());
     return optAst;
@@ -45,12 +40,7 @@ public class ParserTest extends MontiArcTestBase {
       boolean expParserErrors) {
     MontiArcParser parser = MontiArcMill.parser();
     Optional<ASTMACompilationUnit> optAst;
-    try {
-      optAst = parser.parse_String(content);
-    }
-    catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    optAst = parser.parse_String(content);
     if (expParserErrors) {
       assertThat(parser.hasErrors()).isTrue();
       assertThat(optAst).isNotPresent();

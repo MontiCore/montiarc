@@ -39,7 +39,6 @@ import variablearc.context.VariableArcWithinComponentResolver;
 import variablearc.presence.PresenceResolver;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -63,11 +62,7 @@ public class AutomataLoader {
   private static ASTCDCompilationUnit parseCD(String cdFilePath) {
     CD4CodeParser cdParser = new CD4CodeParser();
     final Optional<ASTCDCompilationUnit> optCdAST;
-    try {
-      optCdAST = cdParser.parse(cdFilePath);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    optCdAST = cdParser.parse(cdFilePath);
 
     assert (optCdAST.isPresent());
     return optCdAST.get();
@@ -103,11 +98,7 @@ public class AutomataLoader {
   private static ASTMACompilationUnit parseMA(File maFile) {
     MontiArcParser parser = MontiArcMill.parser();
     Optional<ASTMACompilationUnit> optAst;
-    try {
-      optAst = parser.parse(maFile.toString());
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    optAst = parser.parse(maFile.toString());
     assert optAst.isPresent();
     return optAst.get();
   }

@@ -28,17 +28,16 @@ public class MontiArcParser extends MontiArcParserTOP {
    * ASTMACompilationUnit} as its root wrapped by an {@code Optional}. An empty {@code Optional} is
    * returned if a parse error is raised.
    *
-   * <p> An exception of type {@code IOException} is thrown if an I/O exception of some sort
-   * occurs. Error {@code COMPONENT_AND_FILE_NAME_DIFFER} is raised if component name and file root
+   * <p> An error is logged and an empty {@code Optional} is returned if an I/O exception of some
+   * sort occurs. Error {@code COMPONENT_AND_FILE_NAME_DIFFER} is raised if component name and file root
    * differ. Error {@code COMPONENT_AND_FILE_PACKAGE_DIFFER} is raised if component package and file
    * package differ.
    *
    * @param file the {@code String} contained the relative path of the file to be parsed
    * @return an {@code Optional} of an abstract syntax tree representing the parsed file
-   * @throws IOException if an I/O exception of some sort occurs
    */
   @Override
-  public Optional<ASTMACompilationUnit> parseMACompilationUnit(@NotNull String file) throws IOException {
+  public Optional<ASTMACompilationUnit> parseMACompilationUnit(@NotNull String file) {
     Preconditions.checkNotNull(file);
     Optional<ASTMACompilationUnit> ast = super.parseMACompilationUnit(file);
     if (ast.isPresent()) {
@@ -58,7 +57,7 @@ public class MontiArcParser extends MontiArcParserTOP {
   }
 
   @Override
-  public Optional<ASTMACompilationUnit> parse(@NotNull String file) throws IOException {
+  public Optional<ASTMACompilationUnit> parse(@NotNull String file) {
     Preconditions.checkNotNull(file);
     return this.parseMACompilationUnit(file);
   }

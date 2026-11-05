@@ -6,7 +6,6 @@ import de.se_rwth.commons.logging.Log;
 import mceffect._ast.ASTMCEffect;
 import mceffect.util.MCEffectError;
 
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Optional;
 
@@ -35,7 +34,7 @@ public class MCEffectParser extends MCEffectParserTOP {
   }
 
   @Override
-  public Optional<ASTMCEffect> parse(String fileName) throws IOException {
+  public Optional<ASTMCEffect> parse(String fileName) {
 
     final Optional<ASTMCEffect> parse = super.parse(fileName);
 

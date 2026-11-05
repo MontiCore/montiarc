@@ -59,18 +59,14 @@ public abstract class MontiArcTestBase extends ATestBase {
    */
   public static ASTMACompilationUnit compile(@NotNull String model) {
     Preconditions.checkNotNull(model);
-    try {
-      ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model)
-        .orElseThrow(() -> new IllegalStateException(Log.getFindings().toString()));
-      MontiArcTrafos.afterParsing().applyAll(ast);
-      MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
-      MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
-      MontiArcTrafos.afterSymTabP2().applyAll(ast);
-      MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
-      MontiArcMill.presenceFormulaCalculator().calculate(ast.getArcComponentType());
-      return ast;
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model)
+      .orElseThrow(() -> new IllegalStateException(Log.getFindings().toString()));
+    MontiArcTrafos.afterParsing().applyAll(ast);
+    MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
+    MontiArcTrafos.afterSymTabP2().applyAll(ast);
+    MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
+    MontiArcMill.presenceFormulaCalculator().calculate(ast.getArcComponentType());
+    return ast;
   }
 }

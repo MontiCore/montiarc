@@ -18,7 +18,6 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._symboltable.IVariableArcComponentTypeSymbol;
 import variablearc.presence.PresenceFormulasDeSer;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -37,11 +36,7 @@ public class MontiArcComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSer {
   }
 
   protected Optional<ASTExpression> parse(String e) {
-    try {
-      return MontiArcMill.parser().parse_StringExpression(e);
-    } catch (IOException ex) {
-      return Optional.empty();
-    }
+    return MontiArcMill.parser().parse_StringExpression(e);
   }
 
   @Override

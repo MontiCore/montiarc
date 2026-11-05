@@ -9,7 +9,6 @@ import syscl.SysCLTestBase;
 import syscl._ast.ASTSysCLCompilationUnit;
 import syscl._parser.SysCLParser;
 
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Optional;
 
@@ -35,11 +34,7 @@ public class ParserTest extends SysCLTestBase {
   public void shouldParseWithoutError(String fileName) {
     SysCLParser parser = SysCLMill.parser();
     Optional<ASTSysCLCompilationUnit> optAst;
-    try {
-      optAst = parser.parse(Paths.get(TEST_RESOURCE, PACKAGE, fileName).toString());
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    optAst = parser.parse(Paths.get(TEST_RESOURCE, PACKAGE, fileName).toString());
     assertThat(optAst.isPresent()).isTrue();
     assertThat(parser.hasErrors()).isFalse();
     assertThat(Log.getFindings()).isEmpty();
