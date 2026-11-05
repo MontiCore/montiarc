@@ -3,7 +3,7 @@ package montiarc.mixed_timing.automata;
 
 import montiarc.types.OnOff;
 
-component Medium {
+<<deploy>> component Medium {
   port in OnOff inA, inB;
   port sync in OnOff inY, inZ;
 

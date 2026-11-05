@@ -2,6 +2,14 @@
 # Simulating the System
 
 To [simulate the system](../../Reference/Simulation/index.md), we can use the Gradle run task like before.
+Deployment classes are only generated for components marked with the `<<deploy>>` stereotype, thus we add it to the elevator system:
+
+```montiarc
+<<deploy>> component ElevatorSystem {
+  ...
+}
+```
+
 To make life easier, we can also set the main class to the deployment elevator system class. 
 
 === "build.gradle.kts"

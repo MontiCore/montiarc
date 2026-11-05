@@ -45,12 +45,12 @@ Elements located in another package must be imported explicitly, like the MontiA
 #### Component
 
 ```montiarc
-component HelloWorld {
+<<deploy>> component HelloWorld {
 
 }
 ```
 The main part is a [component](../Reference/Component/index.md) called `HelloWorld`. Components are the core building blocks of any MontiArc model and describe a unit of common characteristics that interact with the environment through well-defined interfaces.
-In our example, the component has no interface and thus is deployable, i.e. executable.
+The `<<deploy>>` stereotype marks the component as deployable, i.e. executable: the generator only creates the deployment classes, such as `DeployHelloWorld`, for components with this stereotype.
 
 Components can consist of other components, which we refer to as [decomposed](../Reference/Component/Decomposition.md) components, or contain a behavior description, so-called [atomic](../Reference/Behavior/index.md) components. In our example, the component is atomic, and the behavior is described by an [automaton](../Reference/Behavior/Automata.md).
 

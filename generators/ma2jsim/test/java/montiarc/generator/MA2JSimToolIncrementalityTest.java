@@ -793,7 +793,7 @@ class MA2JSimToolIncrementalityTest extends MA2JSimTestBase {
     Path packagePathQualified = modelDirToUse.resolve(usedPackageAsPath);
 
     String model = String.format(
-        "package %s; component %s { }",
+        "package %s; <<deploy>> component %s { }",
         usedPackage, modelname);
 
     Files.createDirectories(packagePathQualified);

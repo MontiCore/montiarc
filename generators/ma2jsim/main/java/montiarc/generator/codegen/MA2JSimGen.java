@@ -34,6 +34,7 @@ import java.util.Optional;
 public class MA2JSimGen {
 
   protected static String FILE_EXTENSION = "java";
+  public static final String DEPLOY_STEREOTYPE = "deploy";
   protected GeneratorEngine engine;
   protected GeneratorSetup setup;
   protected MA2JSimCodeFormatter formatter;
@@ -125,7 +126,7 @@ public class MA2JSimGen {
       generateModeAutomaton(ast);
     }
 
-    if (ast.getArcComponentType().getSymbol().getTypeParameters().isEmpty()) {
+    if (isDeployed(ast) && ast.getArcComponentType().getSymbol().getTypeParameters().isEmpty()) {
       this.generateComponentDeployment(ast);
       if (!ast.getArcComponentType().getSymbol().getAllPorts().isEmpty()) {
         this.generateComponentMqttDeployment(ast);
@@ -277,6 +278,16 @@ public class MA2JSimGen {
     if (existsHwc) suffix += Suffixes.TOP;
 
     generate(template, ast, "", suffix, existsHwc);
+  }
+
+  /**
+   * @return whether deployment classes should be generated for the component, i.e., whether it is
+   * marked with the {@code <<deploy>>} stereotype
+   */
+  protected boolean isDeployed(@NotNull ASTMACompilationUnit ast) {
+    Preconditions.checkNotNull(ast);
+    ASTArcComponentType comp = ast.getArcComponentType();
+    return comp.isPresentStereotype() && comp.getStereotype().contains(DEPLOY_STEREOTYPE);
   }
 
   /**

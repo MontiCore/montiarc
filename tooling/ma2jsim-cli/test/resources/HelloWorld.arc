@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 import montiarc.lang.*;
 
-component HelloWorld {
+<<deploy>> component HelloWorld {
   automaton {
     initial state S;
     S -> S / {

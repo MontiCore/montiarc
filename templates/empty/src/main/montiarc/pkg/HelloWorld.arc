@@ -3,7 +3,7 @@ package pkg;
 
 import montiarc.lang.*;
 
-component HelloWorld {
+<<deploy>> component HelloWorld {
   automaton {
     initial state S;
     S -> S / {

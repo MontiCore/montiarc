@@ -7,7 +7,7 @@ package elevator;
  * Control System - An AutoFocus Case Study." Technical Report TUM-I9906,
  * Technische Universität München (1999).
  */
-component ElevatorSystem {
+<<deploy>> component ElevatorSystem {
 
   port sync in Boolean btn1, btn2, btn3, btn4,
        sync out Boolean light1, light2, light3, light4;

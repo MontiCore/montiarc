@@ -14,31 +14,42 @@ public interface IMontiArcArtifactScope extends IMontiArcArtifactScopeTOP {
   @Override
   default boolean checkIfContinueAsSubScope(String symbolName) {
     if (this.isExportingSymbols()) {
-      final List<String> symbolQualifierParts = splitToList(symbolName);
-      if (!symbolQualifierParts.isEmpty() && !symbolQualifierParts.getLast().equals(".")) {
-        symbolQualifierParts.removeLast();
-      }
-      symbolQualifierParts.removeIf(part -> part.trim().isEmpty());
-      final List<String> packageParts = getPackageParts();
-
-      boolean symbolNameStartsWithPackage = true;
-
       if (getPackageName().isEmpty()) {
         // symbol qualifier always contains default package (i.e., empty string)
-        symbolNameStartsWithPackage = true;
-      } else if (symbolQualifierParts.size() >= packageParts.size()) {
-        for (int i = 0; i < packageParts.size(); i++) {
-          if (!packageParts.get(i).equals(symbolQualifierParts.get(i))) {
-            symbolNameStartsWithPackage = false;
-            break;
-          }
-        }
-      } else {
-        symbolNameStartsWithPackage = false;
+        return true;
       }
-      return symbolNameStartsWithPackage;
+      // Checks whether the package parts are a prefix of the symbol's qualifier, i.e., all but the last
+      // dot-separated part of the symbol name, ignoring blank parts. This is called for every artifact
+      // scope of the global scope, thus we compare in place instead of splitting the symbol name.
+      final List<String> packageParts = getPackageParts();
+      int matched = 0;
+      int start = 0;
+      int next;
+      while (matched < packageParts.size()) {
+        if ((next = symbolName.indexOf('.', start)) == -1) {
+          // the remainder is the simple name, which is not part of the qualifier
+          return false;
+        }
+        if (!isBlank(symbolName, start, next)) {
+          final String packagePart = packageParts.get(matched);
+          if (packagePart.length() != next - start || !symbolName.startsWith(packagePart, start)) {
+            return false;
+          }
+          matched++;
+        }
+        start = next + 1;
+      }
+      return true;
     }
     return false;
+  }
+
+  private static boolean isBlank(String s, int from, int to) {
+    for (int i = from; i < to; i++) {
+      // consistent with String#trim
+      if (s.charAt(i) > ' ') return false;
+    }
+    return true;
   }
 
   default List<String> splitToList(String symbolName) {

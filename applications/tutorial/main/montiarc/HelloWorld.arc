@@ -2,7 +2,7 @@
 import montiarc.lang.*;
 
 // My HelloWorld component
-component HelloWorld {
+<<deploy>> component HelloWorld {
   automaton {
     initial state S;
     S -> S / {

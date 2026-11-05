@@ -19,7 +19,7 @@ This might be useful for prototyping your models. You can control how fast the s
 setting the tick length. 
 
 Two different backends are available to interact with the simulation.
-For every backend and component a java class with a main method is generated.
+For every backend and component marked with the `<<deploy>>` stereotype, a java class with a main method is generated.
 These can be found in your build folder. 
 To run the simulation simply execute the main method using your IDE. 
 

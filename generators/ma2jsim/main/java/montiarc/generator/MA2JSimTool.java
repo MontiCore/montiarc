@@ -247,7 +247,7 @@ public class MA2JSimTool extends MontiArcTool {
     MCPath modelPaths = new MCPath(input);
 
     List<Path> hwcsAsPaths = Arrays.stream(hwc).map(Paths::get).collect(Collectors.toList());
-    MA2JSimGen generator = new MA2JSimGen(Paths.get(o), hwcsAsPaths);
+    MA2JSimGen generator = createGenerator(Paths.get(o), hwcsAsPaths);
 
     for (ASTMACompilationUnit ast : models4NewGeneration) {
       Optional<Path> modelLocation = IncCheckUtil.findModelLocation(modelPaths, ast);
@@ -264,6 +264,10 @@ public class MA2JSimTool extends MontiArcTool {
         Reporting.flush(ast);
       }
     }
+  }
+
+  protected MA2JSimGen createGenerator(@NotNull Path targetDir, @NotNull List<Path> hwcPath) {
+    return new MA2JSimGen(targetDir, hwcPath);
   }
 
   public void generate(@NotNull MA2JSimGen generator, @NotNull ASTMACompilationUnit ast) {

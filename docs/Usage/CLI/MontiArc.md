@@ -46,7 +46,8 @@ montiarc create <name> [-t <templateName>]
 ### Run
 
 To run the simulation, the run command can be used.
-This runs the simulator for a generated `DeployComp.java` file. Additional parameters
+This runs the simulator for a generated `DeployComp.java` file, which is only
+generated for components marked with the `<<deploy>>` stereotype. Additional parameters
 are forwarded to the Component. This command needs Java installed on the
 system.
 

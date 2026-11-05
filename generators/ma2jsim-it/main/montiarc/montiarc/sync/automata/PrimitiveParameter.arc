@@ -3,7 +3,7 @@ package montiarc.sync.automata;
 
 import montiarc.types.OnOff;
 
-component PrimitiveParameter(int p) {
+<<deploy>> component PrimitiveParameter(int p) {
 
   port sync out int o;
 

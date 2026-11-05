@@ -1,6 +1,6 @@
 package elevator;
 
-component ElevatorSystem {
+<<deploy>> component ElevatorSystem {
   port in int pressedOnFloor;
 
   Elevator elevator;
