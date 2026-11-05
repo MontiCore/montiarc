@@ -3601,7 +3601,7 @@
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">montiarc.lang.*</span><span class="p">;</span>
 
 <span class="c1">// My HelloWorld component</span>
-<span class="kd">component</span> <span class="nc">HelloWorld</span><span class="w"> </span><span class="p">{</span>
+<span class="o">&lt;&lt;</span><span class="n">deploy</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="kd">component</span> <span class="nc">HelloWorld</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">S</span><span class="p">;</span>
 <span class="w">    </span><span class="n">S</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
@@ -3632,12 +3632,12 @@ Elements located in another package must be imported explicitly, like the MontiA
 <div class="highlight"><pre><span></span><code><span class="c1">// My HelloWorld component</span>
 </code></pre></div>
 <h4 id="component">Component<a class="headerlink" href="#component" title="Permanent link">&para;</a></h4>
-<p><div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">HelloWorld</span><span class="w"> </span><span class="p">{</span>
+<p><div class="highlight"><pre><span></span><code><span class="o">&lt;&lt;</span><span class="n">deploy</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="kd">component</span> <span class="nc">HelloWorld</span><span class="w"> </span><span class="p">{</span>
 
 <span class="p">}</span>
 </code></pre></div>
 The main part is a <a href="../../Reference/Component/">component</a> called <code>HelloWorld</code>. Components are the core building blocks of any MontiArc model and describe a unit of common characteristics that interact with the environment through well-defined interfaces.
-In our example, the component has no interface and thus is deployable, i.e. executable.</p>
+The <code>&lt;&lt;deploy&gt;&gt;</code> stereotype marks the component as deployable, i.e. executable: the generator only creates the deployment classes, such as <code>DeployHelloWorld</code>, for components with this stereotype.</p>
 <p>Components can consist of other components, which we refer to as <a href="../../Reference/Component/Decomposition/">decomposed</a> components, or contain a behavior description, so-called <a href="../../Reference/Behavior/">atomic</a> components. In our example, the component is atomic, and the behavior is described by an <a href="../../Reference/Behavior/Automata/">automaton</a>.</p>
 <h4 id="automaton">Automaton<a class="headerlink" href="#automaton" title="Permanent link">&para;</a></h4>
 <p><div class="highlight"><pre><span></span><code><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
