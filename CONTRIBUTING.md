@@ -57,10 +57,10 @@ Formatting is checked with [Spotless](https://github.com/diffplug/spotless) (`gr
 
 #### Prerequisites
 - Python
-- MkDocs Material (can be installed with `pip install mkdocs mkdocs-material`)
+- Zensical (can be installed with `pip install zensical`)
 
 #### View Changes
-Run a development server with `mkdocs serve` and open `http://127.0.0.1:8000/montiarc` in your browser
+Run a development server with `zensical serve` and open `http://127.0.0.1:8000/montiarc` in your browser
 
 ## Project Structure
 

@@ -1,0 +1,168 @@
+[project]
+site_name = "MontiArc"
+site_url = "https://monticore.github.io/montiarc/"
+repo_url = "https://github.com/MontiCore/montiarc/"
+copyright = "&copy; https://github.com/MontiCore/monticore"
+extra_css = ["stylesheets/extra.css"]
+extra_javascript = ["javascripts/header-scroll.js"]
+
+nav = [
+  { "Home" = "index.md" },
+  { "Getting Started" = [
+    { "Getting Started" = "GettingStarted/index.md" },
+    { "Setup" = "GettingStarted/Setup.md" },
+    { "Tools & Editors" = "GettingStarted/Editor.md" },
+    { "Hello World!" = "GettingStarted/HelloWorld.md" },
+    { "Hello Gradle!" = "GettingStarted/HelloGradle.md" },
+    { "Your First System" = [
+      { "Your First System" = "GettingStarted/ElevatorSystem/index.md" },
+      { "Interfaces" = "GettingStarted/ElevatorSystem/Interfaces.md" },
+      { "Connectors" = "GettingStarted/ElevatorSystem/Connectors.md" },
+      { "Behavior" = "GettingStarted/ElevatorSystem/Behavior.md" },
+      { "Types" = "GettingStarted/ElevatorSystem/Types.md" },
+      { "Simulating" = "GettingStarted/ElevatorSystem/Simulating.md" }
+    ] }
+  ] },
+  { "Usage" = [
+    { "Usage" = "Usage/index.md" },
+    { "Gradle" = [
+      { "Gradle" = "Usage/Gradle/index.md" },
+      { "MontiArc" = "Usage/Gradle/MontiArc.md" },
+      { "CD2Java" = "Usage/Gradle/CD2Pojo.md" },
+      { "SD2Arc" = "Usage/Gradle/SD2Arc.md" },
+      { "FMU2Arc" = "Usage/Gradle/FMU2Arc.md" }
+    ] },
+    { "CLI" = [
+      { "CLI" = "Usage/CLI/index.md" },
+      { "MontiArc" = "Usage/CLI/MontiArc.md" },
+      { "CD2Java" = "Usage/CLI/CD2Pojo.md" },
+      { "FMU2Arc" = "Usage/CLI/FMU2Arc.md" }
+    ] },
+    { "Errors" = [
+      { "Errors" = "Usage/Errors/index.md" }
+    ] },
+    { "Simulation" = [
+      { "Simulation" = "Usage/Simulation/index.md" }
+    ] }
+  ] },
+  { "Reference" = [
+    { "Reference" = "Reference/index.md" },
+    { "Concepts" = [
+      { "Concepts" = "Reference/Concepts/index.md" },
+      { "Comments" = "Reference/Concepts/Comments.md" },
+      { "Expressions" = [
+        { "Expressions" = "Reference/Concepts/Expressions/index.md" },
+        { "Sets" = "Reference/Concepts/Expressions/Sets.md" },
+        { "Streams" = "Reference/Concepts/Expressions/Streams.md" }
+      ] },
+      { "Statements" = "Reference/Concepts/Statements.md" },
+      { "Timing" = "Reference/Concepts/Timing.md" }
+    ] },
+    { "Component" = [
+      { "Component" = "Reference/Component/index.md" },
+      { "Decomposition" = "Reference/Component/Decomposition.md" },
+      { "Connectors" = "Reference/Component/Connectors.md" },
+      { "Generics" = "Reference/Component/Generics.md" },
+      { "Inheritance" = "Reference/Component/Inheritance.md" },
+      { "Interfaces" = "Reference/Component/Interfaces.md" },
+      { "Parameters" = "Reference/Component/Parameter.md" },
+      { "Variability" = "Reference/Component/Variability.md" },
+      { "Autoconnect" = "Reference/Component/Autoconnect.md" }
+    ] },
+    { "Behavior" = [
+      { "Behavior" = "Reference/Behavior/index.md" },
+      { "Automata" = "Reference/Behavior/Automata.md" },
+      { "Compute" = "Reference/Behavior/Compute.md" },
+      { "Delay" = "Reference/Behavior/Delay.md" },
+      { "Fields" = "Reference/Behavior/Fields.md" },
+      { "Handwritten Code" = "Reference/Behavior/HWC.md" }
+    ] },
+    { "Types" = [
+      { "Types" = "Reference/Types/index.md" },
+      { "Primitives" = "Reference/Types/Primitives.md" },
+      { "Collections" = "Reference/Types/Collections.md" },
+      { "Classes" = "Reference/Types/Classes.md" },
+      { "Java Integration" = "Reference/Types/JavaIntegration.md" }
+    ] },
+    { "Simulation" = [
+      { "Simulation" = "Reference/Simulation/index.md" },
+      { "Co-Simulation (FMUs)" = "Reference/Simulation/CoSimulation.md" },
+      { "Oracle" = "Reference/Simulation/Oracle.md" }
+    ] },
+    { "Testing" = [
+      { "Testing" = "Reference/Testing/index.md" },
+      { "MaUnit" = "Reference/Testing/MaUnit.md" },
+      { "JUnit" = "Reference/Testing/JUnit.md" },
+      { "Sequence Diagrams" = "Reference/Testing/SequenceDiagrams.md" }
+    ] }
+  ] },
+  { "Libraries" = [
+    { "Libraries" = "Libraries/index.md" },
+    { "Standard Library" = [
+      { "Standard Library" = "Libraries/StandardLibrary/index.md" },
+      { "Components" = "Libraries/StandardLibrary/Components.md" },
+      { "Functions" = "Libraries/StandardLibrary/TypesAndFunctions.md" }
+    ] },
+    { "Public Libraries" = [
+      { "Public Libraries" = "Libraries/PublicLibraries/index.md" }
+    ] }
+  ] },
+  { "FAQ" = "FAQ/index.md" },
+  { "License" = "https://monticore.github.io/monticore/00.org/Licenses/LICENSE-MONTICORE-3-LEVEL/" },
+]
+
+[project.theme]
+custom_dir = "docs/overrides"
+logo = "assets/images/icon-mono.png"
+favicon = "assets/images/icon.png"
+features = [
+  "navigation.tabs",
+  "navigation.sections",
+  "navigation.footer",
+  "navigation.instant",
+  "navigation.instant.progress",
+  "navigation.indexes",
+  "toc.follow",
+  "content.tabs.link",
+  "content.code.copy",
+  "content.code.annotate",
+]
+
+[project.theme.icon]
+annotation = "material/help-circle"
+
+[project.extra.version]
+provider = "mike"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/github"
+link = "https://github.com/MontiCore/montiarc"
+
+[[project.extra.social]]
+icon = "fontawesome/solid/paper-plane"
+link = "mailto:webmaster@se-rwth.de"
+
+[project.markdown_extensions]
+def_list = {}
+attr_list = {}
+md_in_html = {}
+admonition = {}
+footnotes = {}
+pymdownx.blocks.caption = {}
+pymdownx.extra = {}
+pymdownx.highlight = {}
+pymdownx.inlinehilite = {}
+pymdownx.details = {}
+pymdownx.snippets = {}
+toc.permalink = true
+pymdownx.tasklist.custom_checkbox = true
+pymdownx.tabbed.alternate_style = true
+
+[[project.markdown_extensions.pymdownx.superfences.custom_fences]]
+name = "mermaid"
+class = "mermaid"
+format = "pymdownx.superfences.fence_code_format"
+
+[project.markdown_extensions.pymdownx.emoji]
+emoji_index = "zensical.extensions.emoji.twemoji"
+emoji_generator = "zensical.extensions.emoji.to_svg"
