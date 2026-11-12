@@ -45,7 +45,7 @@ html {
 
 .md-typeset .info>.admonition-title,
 .md-typeset .info>summary {
-  background-color: var(--rwth-blau-10);
+  background-color: transparent;
 }
 
 .md-typeset .info>.admonition-title::before,
@@ -114,4 +114,93 @@ html {
 .section-card a:hover,
 .section-card a:focus {
   color: var(--rwth-gelb);
+}
+/* Show the MontiArc wordmark instead of the site name in the header */
+.md-header__topic:first-child .md-ellipsis {
+  display: block;
+  flex: none;
+  height: 1.3rem;
+  width: 9.9rem;
+  margin-top: 0.6rem;
+  font-size: 0;
+  background: url("../assets/images/MontiArc_Text.svg") left center / contain no-repeat;
+}
+
+/* Header and tabs: solid RWTH blue at the top, translucent and blurred once
+   scrolled (see javascripts/header-scroll.js). The theme derives the colors of
+   the icons, tabs and search button from these variables. */
+.md-header,
+.md-tabs {
+  --header-bg: var(--rwth-blau);
+  --md-default-fg-color: #fff;
+  --md-default-fg-color--light: rgb(255 255 255 / 0.75);
+  --md-default-bg-color--light: rgb(255 255 255 / 0.25);
+  background-color: var(--header-bg);
+  color: #fff;
+  transition: background-color 0.2s;
+}
+
+html[data-scrolled] .md-header {
+  --header-bg: color-mix(in srgb, var(--rwth-blau) 60%, transparent);
+  /* Flatten what shines through (low contrast), then tint it blue, so white content
+     and the blue tab bar behind the header both blend into the same blue. */
+  backdrop-filter: blur(8px) grayscale(1) contrast(0.4) brightness(0.55) sepia(1) hue-rotate(175deg) saturate(4);
+}
+
+.md-tabs__item--active {
+  border-color: #fff;
+}
+
+.md-header .md-search__button {
+  background-color: rgb(255 255 255 / 0.2);
+}
+
+/* No underlines on links */
+.md-typeset a {
+  text-decoration: none;
+}
+
+/* Readable contrast for the selected item in the sidebar */
+.md-nav--primary .md-nav__item .md-nav__link--active {
+  color: var(--rwth-blau);
+  font-weight: 600;
+}
+
+/* The spacer above the tabs scrolls under the translucent header: paint the page
+   background blue so no white shines through, and give the content (the
+   container starts below the spacer) the normal theme background again. */
+body {
+  background: var(--rwth-blau);
+}
+
+.md-container {
+  background: var(--md-default-bg-color);
+}
+
+/* Mobile drawer header: colored logo on the left and the dark grey wordmark instead
+   of the plain site name (the text node can't be targeted, so hide it via font-size) */
+.md-nav--primary > .md-nav__title {
+  position: relative;
+  font-size: 0 !important;
+}
+
+.md-nav--primary > .md-nav__title .md-logo {
+  background: url("../assets/images/icon.png") center / contain no-repeat;
+}
+
+.md-nav--primary > .md-nav__title .md-logo img {
+  opacity: 0;
+}
+
+.md-nav--primary > .md-nav__title::after {
+  content: "";
+  position: absolute;
+  left: 3rem;
+  top: 50%;
+  width: 7rem;
+  height: 0.9rem;
+  transform: translateY(-50%);
+  background-color: #424242;
+  mask: url("../assets/images/MontiArc_Text.svg") left center / contain no-repeat;
+  -webkit-mask: url("../assets/images/MontiArc_Text.svg") left center / contain no-repeat;
 }

@@ -1,5 +1,6 @@
 <!-- Render navigation link content -->
-{% macro render_content(nav_item, ref = nav_item) %}
+{% macro render_content(nav_item, ref = none) %}
+  {% set ref = ref or nav_item %}
   <!-- !! Removed icon in navigation content !! -->
 
   <!-- Navigation link title -->
@@ -7,7 +8,8 @@
 {% endmacro %}
 
 <!-- Render navigation item -->
-{% macro render(nav_item, ref = nav_item) %}
+{% macro render(nav_item, ref = none) %}
+  {% set ref = ref or nav_item %}
 
   <!-- Determine classes -->
   {% set class = "md-tabs__item" %}
