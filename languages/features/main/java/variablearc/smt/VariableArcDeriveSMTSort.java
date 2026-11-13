@@ -3,7 +3,6 @@ package variablearc.smt;
 
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.Context;
-import com.microsoft.z3.DatatypeSort;
 import com.microsoft.z3.EnumSort;
 import com.microsoft.z3.FuncDecl;
 import com.microsoft.z3.Sort;
@@ -75,8 +74,7 @@ public final class VariableArcDeriveSMTSort implements IDeriveSMTSort {
   }
 
   /**
-   * @param sort an enumeration sort, which Z3 provides as datatype sort for
-   *             the sort of a term
+   * @param sort an enumeration sort
    * @return the index of the constant in the enumeration sort, or -1 if it
    * has none of the name
    */
@@ -84,8 +82,7 @@ public final class VariableArcDeriveSMTSort implements IDeriveSMTSort {
     Preconditions.checkNotNull(sort);
     Preconditions.checkNotNull(constant);
     String name = constantName(sort.getName().toString(), constant);
-    FuncDecl<?>[] constants = sort instanceof EnumSort<?> enumeration ? enumeration.getConstDecls()
-      : sort instanceof DatatypeSort<?> datatype ? datatype.getConstructors() : new FuncDecl<?>[0];
+    FuncDecl<?>[] constants = sort instanceof EnumSort<?> enumeration ? enumeration.getConstDecls() : new FuncDecl<?>[0];
     for (int i = 0; i < constants.length; i++) {
       if (constants[i].getName().toString().equals(name)) {
         return i;

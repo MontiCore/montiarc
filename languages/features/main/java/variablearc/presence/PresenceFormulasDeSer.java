@@ -5,7 +5,6 @@ import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
-import com.microsoft.z3.DatatypeSort;
 import com.microsoft.z3.EnumSort;
 import com.microsoft.z3.Expr;
 import com.microsoft.z3.Sort;
@@ -102,7 +101,7 @@ public class PresenceFormulasDeSer {
     this.enumerationsOf(terms).forEach(enumeration -> {
       String name = enumeration.getName().toString();
       printer.beginArray(name);
-      Arrays.stream(enumeration.getConstructors())
+      Arrays.stream(enumeration.getConstDecls())
         .map(constant -> constant.getName().toString().substring(name.length() + 1))
         .forEach(printer::value);
       printer.endArray();
@@ -181,17 +180,16 @@ public class PresenceFormulasDeSer {
 
   /**
    * @return the enumeration sorts of the subterms of the terms, including
-   * those of constants of enumerations without variables of their sort; Z3
-   * provides the sorts of terms as datatype sorts
+   * those of constants of enumerations without variables of their sort
    */
-  protected Set<DatatypeSort<?>> enumerationsOf(@NotNull List<Expr<?>> terms) {
-    Set<DatatypeSort<?>> enumerations = new LinkedHashSet<>();
+  protected Set<EnumSort<?>> enumerationsOf(@NotNull List<Expr<?>> terms) {
+    Set<EnumSort<?>> enumerations = new LinkedHashSet<>();
     Set<Expr<?>> visited = new HashSet<>();
     Deque<Expr<?>> pending = new ArrayDeque<>(terms);
     while (!pending.isEmpty()) {
       Expr<?> term = pending.pop();
       if (!visited.add(term)) continue;
-      if (term.getSort() instanceof DatatypeSort<?> enumeration) {
+      if (term.getSort() instanceof EnumSort<?> enumeration) {
         enumerations.add(enumeration);
       }
       if (term.isApp()) {
