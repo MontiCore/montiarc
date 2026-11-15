@@ -41,6 +41,52 @@ where
 
 * `S` is the unique name of the state (defines the state's name)
 
+## State Invariants
+
+A state invariant is a boolean expression that defines a condition checked
+when a state is entered and after its do-action is executed. It is written in
+square brackets after the state's name:
+
+```montiarc
+state S [CONDITION];
+```
+
+The `CONDITION` may refer to component fields. For example, the entry action of
+`Active` establishes the invariant before it is evaluated:
+
+```montiarc
+component Comp {
+  int mode = 0;
+
+  automaton {
+    initial state Idle [mode == 0];
+
+    state Active [mode == 1] {
+      entry / { mode = 1; }
+    }
+
+    Idle -> Active;
+  }
+}
+```
+
+During simulation, an invariant is evaluated after the state's entry action.
+When the state is reached by a transition, the transition action is executed
+before the target state's entry action and invariant check. If the state
+defines a do-action, the invariant is evaluated again after each execution of
+that action. A violated invariant produces a warning but does not stop the
+statechart's execution.
+
+If a substate and its directly enclosing state both define an invariant, the
+generated check for the substate combines both conditions. In the following
+example, `Child` effectively has the invariant `value > 0 && value < 10`:
+
+```montiarc
+state Parent [value > 0] {
+  initial state Child [value < 10];
+}
+```
+
 ## Transitions
 
 An automaton can have any number of transitions between states.
