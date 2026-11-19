@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/icon.png">
-      <meta name="generator" content="zensical-0.1.1">
+      <meta name="generator" content="zensical-0.1.2">
     
     
       
@@ -2272,6 +2272,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#state-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        State Invariants
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#transitions" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -3413,6 +3424,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#state-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        State Invariants
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#transitions" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -3603,6 +3625,41 @@ and transitions.</p>
 <p><code>S</code> is the unique name of the state (defines the state's name)</p>
 </li>
 </ul>
+<h2 id="state-invariants">State Invariants<a class="headerlink" href="#state-invariants" title="Permanent link">&para;</a></h2>
+<p>A state invariant is a boolean expression that defines a condition checked
+when a state is entered and after its do-action is executed. It is written in
+square brackets after the state's name:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">state</span> <span class="nc">S</span><span class="w"> </span><span class="o">[</span><span class="n">CONDITION</span><span class="o">]</span><span class="p">;</span>
+</code></pre></div>
+<p>The <code>CONDITION</code> may refer to component fields. For example, the entry action of
+<code>Active</code> establishes the invariant before it is evaluated:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Comp</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">Idle</span><span class="w"> </span><span class="o">[</span><span class="n">mode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="o">]</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">state</span> <span class="nc">Active</span><span class="w"> </span><span class="o">[</span><span class="n">mode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="o">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">entry</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">Idle</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Active</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>During simulation, an invariant is evaluated after the state's entry action.
+When the state is reached by a transition, the transition action is executed
+before the target state's entry action and invariant check. If the state
+defines a do-action, the invariant is evaluated again after each execution of
+that action. A violated invariant produces a warning but does not stop the
+statechart's execution.</p>
+<p>If a substate and its directly enclosing state both define an invariant, the
+generated check for the substate combines both conditions. In the following
+example, <code>Child</code> effectively has the invariant <code>value &gt; 0 &amp;&amp; value &lt; 10</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">state</span> <span class="nc">Parent</span><span class="w"> </span><span class="o">[</span><span class="n">value</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">Child</span><span class="w"> </span><span class="o">[</span><span class="n">value</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="o">]</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 <h2 id="transitions">Transitions<a class="headerlink" href="#transitions" title="Permanent link">&para;</a></h2>
 <p>An automaton can have any number of transitions between states.</p>
 <p>A simple transition looks like</p>
