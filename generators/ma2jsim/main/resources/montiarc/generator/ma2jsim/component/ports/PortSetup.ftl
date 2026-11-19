@@ -11,6 +11,7 @@ protected void <@MethodNames.portSetup/>() {
     this.${prefixes.port()}${port.getName()} = new montiarc.rte.port.ScheduledPort<>(getName() + ".${port.getName()}", this, scheduler);
   </#list>
   <#list ast.getSymbol().getAllOutgoingPorts() as port>
-    this.${prefixes.port()}${port.getName()} = new montiarc.rte.port.PortForward<>(getName() + ".${port.getName()}", this);
+    <#assign portClass = helper.getComponentHelper().isSync(port)?then("SyncedPortForward", "PortForward")>
+    this.${prefixes.port()}${port.getName()} = new montiarc.rte.port.${portClass}<>(getName() + ".${port.getName()}", this);
   </#list>
 }

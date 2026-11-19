@@ -2,7 +2,10 @@
 package montiarc.sync.compute;
 
 import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Finding;
+import de.se_rwth.commons.logging.Log;
 import montiarc.rte.msg.Message;
+import montiarc.rte.msg.Tick;
 import montiarc.rte.port.PortObserver;
 import montiarc.rte.tests.JSimTest;
 import montiarc.types.OnOff;
@@ -48,6 +51,13 @@ class Send2MessagesTest {
 
     // Then
     Assertions.assertThat(port_o.getObservedMessages()).containsExactlyElementsOf(expected);
+    int expectedWarnings = Math.toIntExact(expected.stream().filter(msg -> msg == Tick.<OnOff>get()).count());
+    Assertions.assertThat(Log.getFindings())
+      .filteredOn(Finding::isWarning)
+      .extracting(Finding::getMsg)
+      .hasSize(expectedWarnings)
+      .allMatch(msg -> msg.equals("No message was sent on synchronized port 'sut.o' during the current time slice.")
+        || msg.equals("2 messages were sent on synchronized port 'sut.o' during the current time slice."));
   }
 
   static Stream<Arguments> io() {

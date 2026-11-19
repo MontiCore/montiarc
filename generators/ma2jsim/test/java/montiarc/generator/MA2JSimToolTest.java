@@ -66,6 +66,34 @@ public class MA2JSimToolTest extends MA2JSimTestBase {
   }
 
   @Test
+  public void testBuildUsesDedicatedForwardForSynchronizedOutputs(@TempDir Path models,
+                                                                  @TempDir Path target) throws IOException {
+    // Given
+    Files.writeString(models.resolve("MixedOutputs.arc"), """
+      package example;
+      component MixedOutputs {
+        port sync out int synchronizedOutput;
+        port out int eventOutput;
+      }
+      """);
+    String[] args = new String[] {
+      "-i", models.toAbsolutePath().toString(),
+      "-o", target.toAbsolutePath().toString()
+    };
+
+    // When
+    MA2JSimTool.main(args);
+
+    // Then
+    String generatedComponent = Files.readString(
+      target.resolve("example").resolve("MixedOutputsCompImpl.java")
+    );
+    assertThat(generatedComponent)
+      .contains("new montiarc.rte.port.SyncedPortForward<>(")
+      .contains("new montiarc.rte.port.PortForward<>(");
+  }
+
+  @Test
   public void testBuildRejectsJavaKeywordsAsTypeParameters(@TempDir Path models,
                                                            @TempDir Path target) throws IOException {
     // Given

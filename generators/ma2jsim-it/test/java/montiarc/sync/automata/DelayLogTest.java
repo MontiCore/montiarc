@@ -74,67 +74,68 @@ class DelayLogTest {
       Arguments.of(
         List.of(),
         List.of("[INFO]  sut#init ",
-          "[INFO]  sut.o#send OFF",
-          "[INFO]  sut#enter_state Init")
+          "[INFO]  sut#enter_state Init",
+          "[INFO]  sut.o#send OFF")
       ),
       Arguments.of(
         List.of(msg(OnOff.ON), tk()),
         List.of("[INFO]  sut#init ",
-          "[INFO]  sut.o#send OFF",
           "[INFO]  sut#enter_state Init",
+          "[INFO]  sut.o#send OFF",
           "[INFO]  Scheduler --- Tick 1 ---",
           "[INFO]  sut#receive Tick",
-          "[INFO]  sut.o#send ON",
-          "[INFO]  sut#enter_state S")
+          "[INFO]  sut#enter_state S",
+          "[INFO]  sut.o#send ON")
       ),
       Arguments.of(
         List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk()),
         List.of("[INFO]  sut#init ",
-          "[INFO]  sut.o#send OFF",
           "[INFO]  sut#enter_state Init",
+          "[INFO]  sut.o#send OFF",
           "[INFO]  Scheduler --- Tick 1 ---",
           "[INFO]  sut#receive Tick",
-          "[INFO]  sut.o#send ON",
           "[INFO]  sut#enter_state S",
+          "[INFO]  sut.o#send ON",
           "[INFO]  Scheduler --- Tick 2 ---",
           "[INFO]  sut#receive Tick",
-          "[INFO]  sut.o#send ON",
-          "[INFO]  sut#enter_state S")
+          "[INFO]  sut#enter_state S",
+          "[INFO]  sut.o#send ON")
       ),
       Arguments.of(
         List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk()),
         List.of("[INFO]  sut#init ",
-          "[INFO]  sut.o#send OFF",
           "[INFO]  sut#enter_state Init",
+          "[INFO]  sut.o#send OFF",
           "[INFO]  Scheduler --- Tick 1 ---",
           "[INFO]  sut#receive Tick",
-          "[INFO]  sut.o#send OFF",
           "[INFO]  sut#enter_state S",
+          "[INFO]  sut.o#send OFF",
           "[INFO]  Scheduler --- Tick 2 ---",
           "[INFO]  sut#receive Tick",
-          "[INFO]  sut.o#send OFF",
           "[INFO]  sut#enter_state S",
+          "[INFO]  sut.o#send OFF",
           "[INFO]  Scheduler --- Tick 3 ---",
           "[INFO]  sut#receive Tick",
-          "[INFO]  sut.o#send OFF",
-          "[INFO]  sut#enter_state S")
+          "[INFO]  sut#enter_state S",
+          "[INFO]  sut.o#send OFF")
       ),
       Arguments.of(
         List.of(tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk()),
         List.of("[INFO]  sut#init ",
-          "[INFO]  sut.o#send OFF",
           "[INFO]  sut#enter_state Init",
+          "[INFO]  sut.o#send OFF",
           "[INFO]  Scheduler --- Tick 1 ---",
           "[INFO]  sut#receive Tick",
           "[INFO]  sut#enter_state S",
+          "[WARN]  No message was sent on synchronized port 'sut.o' during the current time slice.",
           "[INFO]  Scheduler --- Tick 2 ---",
           "[INFO]  sut#receive Tick",
-          "[INFO]  sut.o#send OFF",
           "[INFO]  sut#enter_state S",
+          "[INFO]  sut.o#send OFF",
           "[INFO]  Scheduler --- Tick 3 ---",
           "[INFO]  sut#receive Tick",
-          "[INFO]  sut.o#send OFF",
-          "[INFO]  sut#enter_state S")
+          "[INFO]  sut#enter_state S",
+          "[INFO]  sut.o#send OFF")
       )
     );
   }
