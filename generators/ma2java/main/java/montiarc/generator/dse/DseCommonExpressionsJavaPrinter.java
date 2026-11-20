@@ -293,6 +293,24 @@ public class DseCommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrin
   }
 
   @Override
+  public void handle(de.monticore.expressions.commonexpressions._ast.ASTStaticFieldAccessExpression node) {
+
+    if (this.isPrintComments()) {
+      de.monticore.prettyprint.CommentPrettyPrinter.printPreComments(node, getPrinter());
+    }
+
+    getPrinter().print(node.getType().printType().toLowerCase());
+    getPrinter().print(".getConst(getEnumIndex(\"" + node.getName() + "\", ");
+    getPrinter().print(node.getType().printType().toLowerCase());
+    getPrinter().print("))");
+
+    if (this.isPrintComments()) {
+      de.monticore.prettyprint.CommentPrettyPrinter.printPostComments(node, getPrinter());
+    }
+
+  }
+
+  @Override
   public void handle(de.monticore.expressions.commonexpressions._ast.ASTPlusPrefixExpression node) {
     montiarc.rte.log.Log.error("The operator 'plus prefix expression' is not supported");
   }

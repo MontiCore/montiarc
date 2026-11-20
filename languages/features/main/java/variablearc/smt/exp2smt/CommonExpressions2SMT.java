@@ -28,8 +28,11 @@ import de.monticore.expressions.commonexpressions._ast.ASTModuloExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTMultExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTNotEqualsExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTPlusExpression;
+import de.monticore.expressions.commonexpressions._ast.ASTQualifiedNameExpression;
 import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsHandler;
 import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsTraverser;
+import de.monticore.expressions.expressionsbasis.ExpressionsBasisMill;
+import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
@@ -40,6 +43,7 @@ import variablearc._symboltable.IVariableArcScope;
 import variablearc.smt.VariableArcDeriveSMTSort;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -85,17 +89,42 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
   @Override
   public void handle(@NotNull ASTFieldAccessExpression node) {
     Preconditions.checkNotNull(node);
+    Optional<String> innerName = node.getExpression() instanceof ASTNameExpression nameExpression ?
+      Optional.of(nameExpression.getName()) : Optional.empty();
+    this.handleNamedAccess(node, innerName, node.getName());
+  }
+
+  @Override
+  public void handle(@NotNull ASTQualifiedNameExpression node) {
+    Preconditions.checkNotNull(node);
+    List<String> parts = node.getMCQualifiedName().getPartsList();
+    if (parts.size() == 1) {
+      // a single name, e.g., if not replaced by a name expression after parsing
+      ASTNameExpression name = ExpressionsBasisMill.nameExpressionBuilder().setName(parts.get(0)).build();
+      name.setEnclosingScope(node.getEnclosingScope());
+      name.accept(this.getTraverser());
+      return;
+    }
+    Optional<String> innerName = parts.size() == 2 ? Optional.of(parts.get(0)) : Optional.empty();
+    this.handleNamedAccess(node, innerName, parts.get(parts.size() - 1));
+  }
+
+  /**
+   * Handles accesses of form x.f, with x being the name of a subcomponent,
+   * and accesses of form a.X...X.b.c, e.g., enum constants.
+   */
+  protected void handleNamedAccess(@NotNull ASTExpression node, @NotNull Optional<String> innerName,
+                                   @NotNull String name) {
     getResult().clear();
 
     IVariableArcScope scope = (IVariableArcScope) node.getEnclosingScope();
-    if (node.getExpression() instanceof ASTNameExpression nameExpression) {
+    if (innerName.isPresent()) {
       // Handle only features of subcomponents of form x.f; their parameters are not accessible
-      String name = nameExpression.getName();
-      Optional<SubcomponentSymbol> instanceSymbol = this.resolveSubcomponent(scope, name);
+      Optional<SubcomponentSymbol> instanceSymbol = this.resolveSubcomponent(scope, innerName.get());
       if (instanceSymbol.isPresent() && instanceSymbol.get().isTypePresent()) {
         ComponentTypeSymbol type = instanceSymbol.get().getType().getTypeInfo();
-        if (!((IVariableArcScope) type.getSpannedScope()).resolveArcFeatureMany(node.getName()).isEmpty()) {
-          this.getResult().setValue(this.deriveSMTExpr.variable(name + "." + node.getName(), this.getContext().getBoolSort()));
+        if (!((IVariableArcScope) type.getSpannedScope()).resolveArcFeatureMany(name).isEmpty()) {
+          this.getResult().setValue(this.deriveSMTExpr.variable(innerName.get() + "." + name, this.getContext().getBoolSort()));
         }
       }
     }
@@ -103,9 +132,9 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
       // Handle all other field access expressions of form a.X...X.b.c
       Optional<Sort> sort = this.getExpr2Sort().toSort(node);
       if (sort.isPresent()) {
-        if (sort.get() instanceof EnumSort<?> enumSort && VariableArcDeriveSMTSort.indexOf(enumSort, node.getName()) >= 0) {
+        if (sort.get() instanceof EnumSort<?> enumSort && VariableArcDeriveSMTSort.indexOf(enumSort, name) >= 0) {
           // Handle enum constants
-          this.getResult().setValue(enumSort.getConst(VariableArcDeriveSMTSort.indexOf(enumSort, node.getName())));
+          this.getResult().setValue(enumSort.getConst(VariableArcDeriveSMTSort.indexOf(enumSort, name)));
         } else {
           this.deriveSMTExpr.setUnknown(node, sort.get());
         }

@@ -15,6 +15,7 @@ import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraver
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import montiarc._parser.MontiArcParser;
+import montiarc.trafo.MANameExpressionTrafo;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -72,7 +73,7 @@ public class ExpressionRootFinderTest extends MontiArcTestBase {
     private Argument(@NotNull Optional<? extends ASTNode> node) {
       Preconditions.checkNotNull(node);
       Preconditions.checkArgument(node.isPresent());
-      arguments = new Object[]{node.get(), set};
+      arguments = new Object[]{new MANameExpressionTrafo().applyTo(node.get()), set};
     }
 
     private Argument is(@NotNull Class<?> type){

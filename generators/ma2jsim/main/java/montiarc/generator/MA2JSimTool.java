@@ -206,6 +206,9 @@ public class MA2JSimTool extends MontiArcTool {
     Set<ASTMACompilationUnit> asts = super.compile(i, pp, s, r, c2mc, novar || o != null);
 
     if (o != null) {
+      Log.info(() -> "Run post type-check transformations", "MontiArcTool");
+      this.runAfterTypeCheckTrafos(asts);
+
       Log.info(() -> "Generate java", "MontiArcTool");
       this.generate(asts, i, hwc, o, r);
     }

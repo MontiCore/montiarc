@@ -17,6 +17,7 @@ import de.monticore.types.mcsimplegenerictypes.types3.MCSimpleGenericTypesTypeVi
 import de.monticore.types.mcstructuraltypes.types3.MCStructuralTypesTypeVisitor;
 import de.monticore.types3.Type4Ast;
 import de.monticore.types3.generics.context.InferenceContext4Ast;
+import de.monticore.types3.util.PostTypeCheckNodeReplacer;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc._visitor.MontiArcTraverser;
@@ -81,6 +82,7 @@ public class MontiArcTypeCheck extends VariableArcTypeCheck {
     VariableArcWithinTypeBasicSymbolsResolver.init(selection);
     MAOOWithinTypeBasicSymbolsResolver.init(selection);
     ArcBasisTypeContextCalculator.init();
+    PostTypeCheckNodeReplacer.init();
     ArcBasisTypeVisitorOperatorCalculator.init();
     CommonExpressionsLValueRelations.init();
     initTypeVisitors(traverser, type4Ast, ctx4Ast);
