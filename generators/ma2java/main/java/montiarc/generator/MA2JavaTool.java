@@ -187,6 +187,9 @@ public class MA2JavaTool extends MontiArcTool {
     }
 
     if (o != null) {
+      Log.info(() -> "Run post type-check transformations", "MontiArcTool");
+      this.runAfterTypeCheckTrafos(asts);
+
       Log.info(() -> "Generate java", "MontiArcTool");
       this.generate(asts, i, hwc, o, r, dse);
     }

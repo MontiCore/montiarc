@@ -9,6 +9,7 @@ import com.google.common.base.Preconditions;
 import de.monticore.expressions.commonexpressions.types3.util.CommonExpressionsLValueRelations;
 import de.monticore.types3.Type4Ast;
 import de.monticore.types3.generics.context.InferenceContext4Ast;
+import de.monticore.types3.util.PostTypeCheckNodeReplacer;
 import de.monticore.visitor.ITraverser;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -73,6 +74,7 @@ public class VariableArcTypeCheck extends ArcBasisTypeCheck {
     VariableArcWithinTypeBasicSymbolsResolver.init(selection);
     VariableArcOOWithinTypeBasicSymbolsResolver.init(selection);
     ArcBasisTypeContextCalculator.init();
+    PostTypeCheckNodeReplacer.init();
     ArcBasisTypeVisitorOperatorCalculator.init();
     CommonExpressionsLValueRelations.init();
     initTypeVisitors(traverser, type4Ast, ctx4Ast);

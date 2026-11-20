@@ -9,6 +9,7 @@ import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import montiarc._parser.MontiArcParser;
 import montiarc._visitor.MontiArcTraverser;
+import montiarc.trafo.MANameExpressionTrafo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -34,7 +35,8 @@ public class NamesInExpressionsVisitorTest extends MontiArcTestBase {
     NamesInExpressionsVisitor visitor = new NamesInExpressionsVisitor();
     MontiArcTraverser traverser = MontiArcMill.traverser();
     visitor.registerTo(traverser);
-    Verify.verifyNotNull(parser.parse_StringExpression(expression).orElse(null)).accept(traverser);
+    new MANameExpressionTrafo().applyTo(Verify.verifyNotNull(parser.parse_StringExpression(expression).orElse(null)))
+      .accept(traverser);
     Map<ASTNameExpression, VarAccessKind> map
       = visitor.getFoundNames();
     List<ASTNameExpression> found = sort(map.keySet(), names);

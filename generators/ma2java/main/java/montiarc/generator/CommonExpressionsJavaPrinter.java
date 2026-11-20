@@ -4,6 +4,8 @@ package montiarc.generator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.commonexpressions._ast.ASTCallExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTFieldAccessExpression;
+import de.monticore.expressions.commonexpressions._ast.ASTQualifiedNameExpression;
+import de.monticore.expressions.commonexpressions._ast.ASTStaticFieldAccessExpression;
 import de.monticore.expressions.commonexpressions._prettyprint.CommonExpressionsPrettyPrinter;
 import de.monticore.prettyprint.CommentPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
@@ -12,6 +14,8 @@ import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeOfFunction;
 import de.monticore.types3.TypeCheck3;
 import org.codehaus.commons.nullanalysis.NotNull;
+
+import java.util.List;
 
 public class CommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrinter {
 
@@ -36,13 +40,20 @@ public class CommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrinter
       && expr instanceof SymTypeOfFunction func
       && func.getSymbol() instanceof MethodSymbol method
       && method.isIsConstructor()) {
-      Preconditions.checkState(node.getExpression() instanceof ASTFieldAccessExpression);
+      Preconditions.checkState(node.getExpression() instanceof ASTFieldAccessExpression
+        || node.getExpression() instanceof ASTStaticFieldAccessExpression
+        || node.getExpression() instanceof ASTQualifiedNameExpression);
       this.getPrinter().print("new ");
       // We call constructors in the name space of the respective type (e.g., Object.Object()).
       // But Java uses new instead, so we have to strip this qualification.
       // See https://git.rwth-aachen.de/monticore/montiarc/core/-/merge_requests/677
       if (node.getExpression() instanceof ASTFieldAccessExpression fieldAccess) {
         fieldAccess.getExpression().accept(getTraverser());
+      } else if (node.getExpression() instanceof ASTStaticFieldAccessExpression staticAccess) {
+        this.getPrinter().print(staticAccess.getType().printType());
+      } else if (node.getExpression() instanceof ASTQualifiedNameExpression qName) {
+        List<String> parts = qName.getMCQualifiedName().getPartsList();
+        this.getPrinter().print(String.join(".", parts.subList(0, parts.size() - 1)));
       }
     } else {
       node.getExpression().accept(getTraverser());

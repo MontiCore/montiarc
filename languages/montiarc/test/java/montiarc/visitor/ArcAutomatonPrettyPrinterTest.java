@@ -6,9 +6,8 @@ import com.google.common.base.Preconditions;
 import de.monticore.expressions.assignmentexpressions._ast.ASTAssignmentExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTCallExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTEqualsExpression;
-import de.monticore.expressions.commonexpressions._ast.ASTFieldAccessExpression;
+import de.monticore.expressions.commonexpressions._ast.ASTQualifiedNameExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTLiteralExpression;
-import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.literals.mccommonliterals._ast.ASTBooleanLiteral;
 import de.monticore.literals.mccommonliterals._ast.ASTStringLiteral;
 import de.monticore.scactions._ast.ASTSCEntryAction;
@@ -203,8 +202,8 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
     Assertions.assertEquals("Opened", closed_opened.getTarget().getName());
 
     // Check guard
-    Assertions.assertInstanceOf(ASTNameExpression.class, ((ASTTransitionBody) closed_opened.getSCTBody()).getPre());
-    Assertions.assertEquals("open", ((ASTNameExpression) ((ASTTransitionBody) closed_opened.getSCTBody()).getPre()).getName());
+    Assertions.assertInstanceOf(ASTQualifiedNameExpression.class, ((ASTTransitionBody) closed_opened.getSCTBody()).getPre());
+    Assertions.assertEquals("open", ((ASTQualifiedNameExpression) ((ASTTransitionBody) closed_opened.getSCTBody()).getPre()).getMCQualifiedName().getQName());
 
     // Check transition
     Assertions.assertInstanceOf(ASTSCTransition.class, statechart.getSCStatechartElement(5));
@@ -220,10 +219,10 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
 
     // Check guard
     Assertions.assertInstanceOf(ASTEqualsExpression.class, ((ASTTransitionBody) locked_closed.getSCTBody()).getPre());
-    Assertions.assertInstanceOf(ASTNameExpression.class, ((ASTEqualsExpression) ((ASTTransitionBody) locked_closed.getSCTBody())
+    Assertions.assertInstanceOf(ASTQualifiedNameExpression.class, ((ASTEqualsExpression) ((ASTTransitionBody) locked_closed.getSCTBody())
       .getPre()).getLeft());
-    Assertions.assertEquals("unlock", ((ASTNameExpression) ((ASTEqualsExpression)
-      ((ASTTransitionBody) locked_closed.getSCTBody()).getPre()).getLeft()).getName());
+    Assertions.assertEquals("unlock", ((ASTQualifiedNameExpression) ((ASTEqualsExpression)
+      ((ASTTransitionBody) locked_closed.getSCTBody()).getPre()).getLeft()).getMCQualifiedName().getQName());
     Assertions.assertEquals("==", ((ASTEqualsExpression)
       ((ASTTransitionBody) locked_closed.getSCTBody()).getPre()).getOperator());
     Assertions.assertInstanceOf(ASTLiteralExpression.class, ((ASTEqualsExpression) ((ASTTransitionBody) locked_closed.getSCTBody())
@@ -262,9 +261,9 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
     Assertions.assertEquals("Opened", closed_opened.getTarget().getName());
 
     // Check guard
-    Assertions.assertInstanceOf(ASTNameExpression.class, ((ASTTransitionBody) closed_opened.getSCTBody()).getPre());
+    Assertions.assertInstanceOf(ASTQualifiedNameExpression.class, ((ASTTransitionBody) closed_opened.getSCTBody()).getPre());
     Assertions.assertEquals("open",
-      ((ASTNameExpression) ((ASTTransitionBody) closed_opened.getSCTBody()).getPre()).getName());
+      ((ASTQualifiedNameExpression) ((ASTTransitionBody) closed_opened.getSCTBody()).getPre()).getMCQualifiedName().getQName());
 
     // Check reaction
     Assertions.assertInstanceOf(ASTMCJavaBlock.class, ((ASTTransitionBody) closed_opened.getSCTBody())
@@ -276,7 +275,7 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
       .getMCBlockStatement(0)).getExpression());
     ASTAssignmentExpression closed_opened_expression = ((ASTAssignmentExpression) ((ASTExpressionStatement) closed_opened_action
       .getMCBlockStatement(0)).getExpression());
-    Assertions.assertEquals("ringing", ((ASTNameExpression) closed_opened_expression.getLeft()).getName());
+    Assertions.assertEquals("ringing", ((ASTQualifiedNameExpression) closed_opened_expression.getLeft()).getMCQualifiedName().getQName());
     Assertions.assertTrue(((ASTBooleanLiteral)
       ((ASTLiteralExpression) closed_opened_expression.getRight()).getLiteral()).getValue());
 
@@ -296,15 +295,9 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
       .getExpression());
     ASTCallExpression closed_locked_expression = ((ASTCallExpression) ((ASTExpressionStatement) closed_locked_action
       .getMCBlockStatement(0)).getExpression());
-    Assertions.assertInstanceOf(ASTFieldAccessExpression.class, closed_locked_expression.getExpression());
-    ASTFieldAccessExpression print = (ASTFieldAccessExpression) closed_locked_expression.getExpression();
-    Assertions.assertEquals("println", print.getName());
-    Assertions.assertInstanceOf(ASTFieldAccessExpression.class, print.getExpression());
-    ASTFieldAccessExpression out = (ASTFieldAccessExpression) print.getExpression();
-    Assertions.assertEquals("out", out.getName());
-    Assertions.assertInstanceOf(ASTNameExpression.class, out.getExpression());
-    ASTNameExpression system = (ASTNameExpression) out.getExpression();
-    Assertions.assertEquals("System", system.getName());
+    Assertions.assertInstanceOf(ASTQualifiedNameExpression.class, closed_locked_expression.getExpression());
+    Assertions.assertEquals("System.out.println",
+      ((ASTQualifiedNameExpression) closed_locked_expression.getExpression()).getMCQualifiedName().getQName());
     Assertions.assertInstanceOf(ASTLiteralExpression.class, closed_locked_expression.getArguments().getExpression(0));
     ASTLiteralExpression arguments = (ASTLiteralExpression) closed_locked_expression.getArguments().getExpression(0);
     Assertions.assertEquals("Door locked now.", ((ASTStringLiteral) arguments.getLiteral()).getSource());
@@ -317,10 +310,10 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
 
     // Check guard
     Assertions.assertInstanceOf(ASTEqualsExpression.class, ((ASTTransitionBody) locked_closed.getSCTBody()).getPre());
-    Assertions.assertInstanceOf(ASTNameExpression.class, ((ASTEqualsExpression) ((ASTTransitionBody) locked_closed.getSCTBody())
+    Assertions.assertInstanceOf(ASTQualifiedNameExpression.class, ((ASTEqualsExpression) ((ASTTransitionBody) locked_closed.getSCTBody())
       .getPre()).getLeft());
-    Assertions.assertEquals("unlock", ((ASTNameExpression) ((ASTEqualsExpression)
-      ((ASTTransitionBody) locked_closed.getSCTBody()).getPre()).getLeft()).getName());
+    Assertions.assertEquals("unlock", ((ASTQualifiedNameExpression) ((ASTEqualsExpression)
+      ((ASTTransitionBody) locked_closed.getSCTBody()).getPre()).getLeft()).getMCQualifiedName().getQName());
     Assertions.assertEquals("==",
       ((ASTEqualsExpression) ((ASTTransitionBody) locked_closed.getSCTBody()).getPre()).getOperator());
     Assertions.assertInstanceOf(ASTLiteralExpression.class, ((ASTEqualsExpression) ((ASTTransitionBody) locked_closed.getSCTBody())
@@ -420,15 +413,9 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
       .getExpression());
     ASTCallExpression entry_expression = ((ASTCallExpression) ((ASTExpressionStatement) entryAction.getMCBlockStatement(0))
       .getExpression());
-    Assertions.assertInstanceOf(ASTFieldAccessExpression.class, entry_expression.getExpression());
-    ASTFieldAccessExpression println = (ASTFieldAccessExpression) entry_expression.getExpression();
-    Assertions.assertEquals("println", println.getName());
-    Assertions.assertInstanceOf(ASTFieldAccessExpression.class, println.getExpression());
-    ASTFieldAccessExpression out = (ASTFieldAccessExpression) println.getExpression();
-    Assertions.assertEquals("out", out.getName());
-    Assertions.assertInstanceOf(ASTNameExpression.class, out.getExpression());
-    ASTNameExpression system = (ASTNameExpression) out.getExpression();
-    Assertions.assertEquals("System", system.getName());
+    Assertions.assertInstanceOf(ASTQualifiedNameExpression.class, entry_expression.getExpression());
+    Assertions.assertEquals("System.out.println",
+      ((ASTQualifiedNameExpression) entry_expression.getExpression()).getMCQualifiedName().getQName());
     Assertions.assertInstanceOf(ASTLiteralExpression.class, entry_expression.getArguments().getExpression(0));
     ASTLiteralExpression arguments = (ASTLiteralExpression) entry_expression.getArguments().getExpression(0);
     Assertions.assertEquals("door opens", ((ASTStringLiteral) arguments.getLiteral()).getSource());
@@ -443,15 +430,9 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
       .getExpression());
     ASTCallExpression exit_expression = ((ASTCallExpression) ((ASTExpressionStatement) exitAction
       .getMCBlockStatement(0)).getExpression());
-    Assertions.assertInstanceOf(ASTFieldAccessExpression.class, exit_expression.getExpression());
-    println = (ASTFieldAccessExpression) exit_expression.getExpression();
-    Assertions.assertEquals("println", println.getName());
-    Assertions.assertInstanceOf(ASTFieldAccessExpression.class, println.getExpression());
-    out = (ASTFieldAccessExpression) println.getExpression();
-    Assertions.assertEquals("out", out.getName());
-    Assertions.assertInstanceOf(ASTNameExpression.class, out.getExpression());
-    system = (ASTNameExpression) out.getExpression();
-    Assertions.assertEquals("System", system.getName());
+    Assertions.assertInstanceOf(ASTQualifiedNameExpression.class, exit_expression.getExpression());
+    Assertions.assertEquals("System.out.println",
+      ((ASTQualifiedNameExpression) exit_expression.getExpression()).getMCQualifiedName().getQName());
     Assertions.assertInstanceOf(ASTLiteralExpression.class, exit_expression.getArguments().getExpression(0));
     arguments = (ASTLiteralExpression) exit_expression.getArguments().getExpression(0);
     Assertions.assertEquals("door closes", ((ASTStringLiteral) arguments.getLiteral()).getSource());

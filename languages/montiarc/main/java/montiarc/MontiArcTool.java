@@ -9,6 +9,7 @@ import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.types.mccollectiontypes.types3.MCCollectionSymTypeRelations;
 import de.monticore.types3.SymTypeRelations;
+import de.monticore.types3.util.PostTypeCheckNodeReplacer;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
@@ -481,6 +482,20 @@ public class MontiArcTool extends MontiArcToolTOP {
   public void runAfterParsingTrafos(@NotNull ASTMACompilationUnit ast) {
     Preconditions.checkNotNull(ast);
     MontiArcTrafos.afterParsing().applyAll(ast);
+  }
+
+  /**
+   * Restructures the ASTs according to the type check (run by the context-conditions),
+   * e.g., qualified names of static fields, as expected by the code generators.
+   */
+  public void runAfterTypeCheckTrafos(@NotNull Collection<ASTMACompilationUnit> asts) {
+    Preconditions.checkNotNull(asts);
+    asts.forEach(this::runAfterTypeCheckTrafos);
+  }
+
+  public void runAfterTypeCheckTrafos(@NotNull ASTMACompilationUnit ast) {
+    Preconditions.checkNotNull(ast);
+    PostTypeCheckNodeReplacer.replace(MontiArcMill::inheritanceTraverser, ast);
   }
 
   public void calculatePresenceFormulas(@NotNull Collection<ASTMACompilationUnit> asts) {

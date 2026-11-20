@@ -2,6 +2,7 @@
 package montiarc.generator.dse;
 
 import de.monticore.expressions.commonexpressions._ast.ASTFieldAccessExpression;
+import de.monticore.expressions.commonexpressions._ast.ASTStaticFieldAccessExpression;
 import de.monticore.expressions.commonexpressions._prettyprint.CommonExpressionsPrettyPrinter;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTLiteralExpression;
@@ -26,6 +27,22 @@ public class DseCommonExpressionsJavaPrinterValue extends CommonExpressionsPrett
     }
 
     getPrinter().print(componentHelper.printExpression(node.getExpression()));
+
+    getPrinter().stripTrailing();
+    getPrinter().print("." + node.getName() + " ");
+
+    if (this.isPrintComments()) {
+      CommentPrettyPrinter.printPostComments(node, getPrinter());
+    }
+  }
+
+  @Override
+  public void handle(ASTStaticFieldAccessExpression node) {
+    if (this.isPrintComments()) {
+      CommentPrettyPrinter.printPreComments(node, getPrinter());
+    }
+
+    getPrinter().print(node.getType().printType());
 
     getPrinter().stripTrailing();
     getPrinter().print("." + node.getName() + " ");

@@ -6,6 +6,7 @@ import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._parser.MontiArcParser;
+import montiarc.trafo.MANameExpressionTrafo;
 import montiarc.util.MontiArcError;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -120,6 +121,8 @@ public class ParserTest extends MontiArcTestBase {
     ASTMACompilationUnit parsedUnit =
       parse(path.toString(), false).orElse(null);
     Assertions.assertNotNull(parsedUnit, path.toAbsolutePath().toString());
+    // the expected ASTs use name expressions for single names
+    new MANameExpressionTrafo().apply(parsedUnit);
     Assertions.assertTrue(unit.deepEquals(parsedUnit), path.toAbsolutePath().toString());
   }
 

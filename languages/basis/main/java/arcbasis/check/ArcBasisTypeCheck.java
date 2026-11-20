@@ -12,6 +12,7 @@ import de.monticore.types.mcbasictypes.types3.MCBasicTypesTypeVisitor;
 import de.monticore.types3.Type4Ast;
 import de.monticore.types3.generics.context.InferenceContext4Ast;
 import de.monticore.types3.util.MapBasedTypeCheck3;
+import de.monticore.types3.util.PostTypeCheckNodeReplacer;
 import de.monticore.visitor.ITraverser;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -62,6 +63,7 @@ public class ArcBasisTypeCheck extends MapBasedTypeCheck3 {
     ArcBasisWithinTypeBasicSymbolsResolver.init();
     ArcBasisOOWithinTypeBasicSymbolsResolver.init();
     ArcBasisTypeContextCalculator.init();
+    PostTypeCheckNodeReplacer.init();
     ArcBasisTypeVisitorOperatorCalculator.init();
     CommonExpressionsLValueRelations.init();
     initTypeVisitors(traverser, type4Ast, ctx4Ast);
@@ -94,6 +96,7 @@ public class ArcBasisTypeCheck extends MapBasedTypeCheck3 {
     expressionBasis.setType4Ast(type4Ast);
     expressionBasis.setContext4Ast(ctx4Ast);
     traverser.add4ExpressionsBasis(expressionBasis);
+    traverser.setExpressionsBasisHandler(expressionBasis);
     Log.trace(() -> "Finish initializing the ExpressionBasis visitor of the type-check delegate", LOG_NAME);
   }
 

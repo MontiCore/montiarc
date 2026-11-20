@@ -22,7 +22,8 @@ public class MontiArcTrafos {
 
   public static MontiArcTrafos afterParsing() {
     return new MontiArcTrafos(ast ->
-      new MAEnforceBlocksInVarIfTrafo()
+      new MANameExpressionTrafo()
+        .andThen(new MAEnforceBlocksInVarIfTrafo())
         .andThen(new MASeparateCompInstantiationFromTypeDeclTrafo())
         .andThen(new MAConnectedToNormalCompInstanceTrafo())
         .apply(ast)
@@ -30,8 +31,10 @@ public class MontiArcTrafos {
   }
 
   public static MontiArcTrafos afterSymTabP2() {
-    return new MontiArcTrafos(
-      new MAAutoConnectTrafo()
+    return new MontiArcTrafos(ast ->
+      new MAValueAccessTrafo()
+        .andThen(new MAAutoConnectTrafo())
+        .apply(ast)
     );
   }
 }
