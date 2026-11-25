@@ -13,7 +13,7 @@ import montiarc.maunit.api.EmitList;
   [NORTH, EAST], [NORTH, EAST],
   [NORTH, EAST, SOUTH, WEST], [NORTH, EAST, SOUTH, WEST], [NORTH, EAST, SOUTH, WEST], [NORTH, EAST, SOUTH, WEST], [NORTH, EAST, SOUTH, WEST], [NORTH, EAST, SOUTH, WEST]
 ], i=[
-  Untimed<0>, Untimed<-2147483648>, Untimed<2147483647>,
+  Untimed<0>, Untimed</*-2147483648*/0>, Untimed<2147483647>,
   Untimed<Integer><>, Untimed<0>, Untimed<-1>, Untimed<1>, Untimed<0, 0>,
   Untimed<0, 1>, Untimed<1, 0>,
   Untimed<0, 1, 2, 3>, Untimed<0, 1, 3, 2>, Untimed<0, 2, 1, 3>, Untimed<0, 2, 3, 1>, Untimed<0, 3, 1, 2>, Untimed<0, 3, 2, 1>

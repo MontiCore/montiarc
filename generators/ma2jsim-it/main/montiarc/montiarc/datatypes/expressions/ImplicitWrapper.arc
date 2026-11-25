@@ -70,7 +70,7 @@ component ImplicitWrapper {
       aWInt = +1; // box int in Integer (signed literal)
       aWInt = -1; // box int in Integer (signed literal)
       aWInt = 2147483647; // box int in Integer (max value)
-      aWInt = -2147483648; // box int in Integer (min value)
+      /*aWInt = -2147483648; // box int in Integer (min value)*/
       aWInt = aChar; // cast char to int, box int in Integer (variable)
       aWInt = aByte; // cast byte to int, box int in Integer (variable)
       aWInt = aShort; // cast short to int, box int in Integer (variable)

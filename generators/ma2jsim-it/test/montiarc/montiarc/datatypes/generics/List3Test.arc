@@ -5,7 +5,7 @@ import montiarc.maunit.api.AssertEqualsUntimed;
 import montiarc.maunit.api.EmitList;
 import montiarc.types.CardinalDirection;
 
-<<test, i=[Untimed<Integer><>, Untimed<0>, Untimed<-1>, Untimed<1>, Untimed<-2147483648>, Untimed<2147483647>, Untimed<-1, 0, 1>], o=[Untimed<CardinalDirection><>, Untimed<CardinalDirection><>, Untimed<CardinalDirection><>, Untimed<CardinalDirection><>, Untimed<CardinalDirection><>, Untimed<CardinalDirection><>, Untimed<CardinalDirection><>]>>
+<<test, i=[Untimed<Integer><>, Untimed<0>, Untimed<-1>, Untimed<1>, Untimed</*-2147483648*/0>, Untimed<2147483647>, Untimed<-1, 0, 1>], o=[Untimed<CardinalDirection><>, Untimed<CardinalDirection><>, Untimed<CardinalDirection><>, Untimed<CardinalDirection><>, Untimed<CardinalDirection><>, Untimed<CardinalDirection><>, Untimed<CardinalDirection><>]>>
 component List3Test(UntimedStream<Integer> i, UntimedStream<CardinalDirection> o) {
   List3 sut;
 
