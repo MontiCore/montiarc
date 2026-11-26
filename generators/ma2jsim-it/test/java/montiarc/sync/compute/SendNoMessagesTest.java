@@ -56,7 +56,8 @@ class SendNoMessagesTest {
       .filteredOn(Finding::isWarning)
       .extracting(Finding::getMsg)
       .hasSize(expectedWarnings)
-      .containsOnly("No message was sent on synchronized port 'sut.o' during the current time slice.");
+      .containsOnly("No message was sent on synchronized port 'sut.o' during the current time slice. "
+        + "Did you mean to create an Optional<T> port instead?");
   }
 
   static Stream<Arguments> io() {

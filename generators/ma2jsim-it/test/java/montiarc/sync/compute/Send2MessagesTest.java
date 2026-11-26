@@ -56,7 +56,8 @@ class Send2MessagesTest {
       .filteredOn(Finding::isWarning)
       .extracting(Finding::getMsg)
       .hasSize(expectedWarnings)
-      .allMatch(msg -> msg.equals("No message was sent on synchronized port 'sut.o' during the current time slice.")
+      .allMatch(msg -> msg.equals("No message was sent on synchronized port 'sut.o' during the current time slice. "
+          + "Did you mean to create an Optional<T> port instead?")
         || msg.equals("2 messages were sent on synchronized port 'sut.o' during the current time slice."));
   }
 

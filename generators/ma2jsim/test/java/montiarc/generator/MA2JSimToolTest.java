@@ -71,14 +71,17 @@ public class MA2JSimToolTest extends MA2JSimTestBase {
     // Given
     Files.writeString(models.resolve("MixedOutputs.arc"), """
       package example;
+      import java.util.Optional;
       component MixedOutputs {
         port sync out int synchronizedOutput;
+        port sync out Optional<Integer> optionalSynchronizedOutput;
         port out int eventOutput;
       }
       """);
     String[] args = new String[] {
       "-i", models.toAbsolutePath().toString(),
-      "-o", target.toAbsolutePath().toString()
+      "-o", target.toAbsolutePath().toString(),
+      "-c2mc"
     };
 
     // When
@@ -90,6 +93,7 @@ public class MA2JSimToolTest extends MA2JSimTestBase {
     );
     assertThat(generatedComponent)
       .contains("new montiarc.rte.port.SyncedPortForward<>(")
+      .contains("new montiarc.rte.port.SyncedOptionalPortForward<>(")
       .contains("new montiarc.rte.port.PortForward<>(");
   }
 

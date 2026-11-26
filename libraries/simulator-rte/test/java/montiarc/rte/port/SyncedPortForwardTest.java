@@ -40,7 +40,8 @@ class SyncedPortForwardTest extends TestBase {
     assertThat(Log.getFindings())
       .allMatch(Finding::isWarning)
       .extracting(Finding::getMsg)
-      .containsExactly("No message was sent on synchronized port 'component.output' during the current time slice.");
+      .containsExactly("No message was sent on synchronized port 'component.output' during the current time slice. "
+        + "Did you mean to create an Optional<T> port instead?");
   }
 
   @Test

@@ -53,7 +53,7 @@ public class SyncedPortForward<T> extends PortForward<T> {
 
     if (messages.isEmpty()) {
       Log.warn("No message was sent on synchronized port '" + getQualifiedName()
-        + "' during the current time slice.");
+        + "' during the current time slice. Did you mean to create an Optional<T> port instead?");
     } else if (messages.size() > 1) {
       Log.warn(messages.size() + " messages were sent on synchronized port '"
         + getQualifiedName() + "' during the current time slice.");

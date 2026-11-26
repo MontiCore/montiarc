@@ -127,7 +127,8 @@ class DelayLogTest {
           "[INFO]  Scheduler --- Tick 1 ---",
           "[INFO]  sut#receive Tick",
           "[INFO]  sut#enter_state S",
-          "[WARN]  No message was sent on synchronized port 'sut.o' during the current time slice.",
+          "[WARN]  No message was sent on synchronized port 'sut.o' during the current time slice. "
+            + "Did you mean to create an Optional<T> port instead?",
           "[INFO]  Scheduler --- Tick 2 ---",
           "[INFO]  sut#receive Tick",
           "[INFO]  sut#enter_state S",

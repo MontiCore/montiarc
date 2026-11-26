@@ -20,6 +20,7 @@ import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types.mccollectiontypes.types3.MCCollectionSymTypeRelations;
 import modes._ast.ASTArcMode;
 import modes._ast.ASTModeAutomaton;
 import montiarc.MontiArcMill;
@@ -44,6 +45,10 @@ public class ComponentHelper {
 
   public boolean isSync(PortSymbol portSymbol) {
     return portSymbol.getTiming().matches(Timing.TIMED_SYNC);
+  }
+
+  public boolean isOptional(ComponentTypeSymbol component, PortSymbol port) {
+    return MCCollectionSymTypeRelations.isOptional(getPortType(component, port));
   }
 
   public boolean isMsgEventPort(PortSymbol portSymbol) {
