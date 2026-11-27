@@ -55,6 +55,7 @@ import static montiarc.util.ArcError.PARAM_DEFAULT_TYPE_MISMATCH;
 import static montiarc.util.ArcError.PORT_MULTIPLE_SENDER;
 import static montiarc.util.ArcError.PORT_UPPER_CASE;
 import static montiarc.util.ArcError.REFINEMENT_IN_PORT_TYPE_MISMATCH;
+import static montiarc.util.ArcError.RAW_USE_OF_PARAMETRIZED_TYPE;
 import static montiarc.util.ArcError.SOURCE_DIRECTION_MISMATCH;
 import static montiarc.util.ArcError.SUBCOMPONENT_UPPER_CASE;
 import static montiarc.util.ArcError.TARGET_DIRECTION_MISMATCH;
@@ -73,6 +74,7 @@ import static montiarc.util.MCError.FOR_EACH_EXPR_NOT_ITERABLE;
 import static montiarc.util.MCError.FOR_EACH_TYPE_MISMATCH;
 import static montiarc.util.MCError.IF_CONDITION_NOT_BOOLEAN;
 import static montiarc.util.MCError.MISSING_COMPONENT;
+import static montiarc.util.MCError.QUALIFIED_TYPE_HAS_NO_TYPE_PARAMETERS;
 import static montiarc.util.MCError.SWITCH_CASE_INCOMPATIBLE;
 import static montiarc.util.MCError.TRANSITION_PRECONDITION_NOT_BOOLEAN;
 import static montiarc.util.MCError.VAR_DECLARATION_TYPE_MISMATCH;
@@ -922,6 +924,27 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mpk(PKG_COMP, "PrimitiveTypeParameterBounds.arc"),
         fn(ERROR, PKG_COMP, "PrimitiveTypeParameterBounds.arc", 13, 26, 13, 39, TYPE_ARG_IGNORES_UPPER_BOUND, "boolean", "int"),
         fn(ERROR, PKG_COMP, "PrimitiveTypeParameterBounds.arc", 16, 26, 16, 39, TYPE_ARG_IGNORES_UPPER_BOUND, "Boolean", "Integer")
+      ),
+      arg("ComponentHeritageRawTypeTest",
+        mpk(PKG_COMP, "ComponentHeritageRawType.arc"),
+        fn(ERROR, PKG_COMP, "ComponentHeritageRawType.arc", 6, 27, 6, 31,
+          RAW_USE_OF_PARAMETRIZED_TYPE, "Base")
+      ),
+      arg("RefinementRawTypeTest",
+        mpk(PKG_COMP, "RefinementRawType.arc"),
+        fn(ERROR, PKG_COMP, "RefinementRawType.arc", 6, 27, 6, 31,
+          RAW_USE_OF_PARAMETRIZED_TYPE, "Base")
+      ),
+      arg("QualifiedTypeRawTypeTest",
+        mpk(PKG_COMP, "QualifiedTypeRawType.arc"),
+        fn(WARNING, PKG_COMP, "QualifiedTypeRawType.arc", 6, 27, 6, 33, OUT_PORT_UNUSED, "output"),
+        fn(ERROR, PKG_COMP, "QualifiedTypeRawType.arc", 5, 32, 5, 46,
+          QUALIFIED_TYPE_HAS_NO_TYPE_PARAMETERS, "java.util.List", "E"),
+        fn(ERROR, PKG_COMP, "QualifiedTypeRawType.arc", 6, 12, 6, 26,
+          QUALIFIED_TYPE_HAS_NO_TYPE_PARAMETERS, "java.util.List", "E"),
+        fn(ERROR, PKG_COMP, "QualifiedTypeRawType.arc", 7, 3, 7, 17,
+          QUALIFIED_TYPE_HAS_NO_TYPE_PARAMETERS, "java.util.List", "E"),
+        fn(ERROR, PKG_COMP, "QualifiedTypeRawType.arc", 10, 3, 10, 8, RAW_USE_OF_PARAMETRIZED_TYPE, "Inner")
       )
     );
   }

@@ -58,7 +58,7 @@ public enum ArcError implements Error {
   TYPE_ARG_IGNORES_UPPER_BOUND("0xC1176", "Type parameter '%s' does not respect its upper bound, should extend '%s'"),
   TOO_FEW_TYPE_ARGUMENTS("0xC1177", "Too few type arguments, expected `%s` but provided `%s`"),
   TOO_MANY_TYPE_ARGUMENTS("0xC1178", "Too many type arguments, expected `%s` but provided `%s`"),
-  RAW_USE_OF_PARAMETRIZED_TYPE("0xC1182", "Raw usage of generic component type `%s`"),
+  RAW_USE_OF_PARAMETRIZED_TYPE("0xC1182", "Raw usage of generic type `%s`"),
   REFINEMENT_PORT_NAME_MISMATCH("0xC1184", "Interface mismatch during refinement, port '%s' exists in '%s' but not in '%s'."),
   REFINEMENT_PORT_DIRECTION_CHANGED("0xC1185", "Direction mismatch, port '%s' has direction '%s', mismatching the direction in the abstraction '%s'"),
   REFINEMENT_TIMING_MISMATCH_IN("0xC1186", "Timing mismatch, port '%s' changes timing from '%s' in the abstraction '%s' to '%s' which is illegal for incoming ports"),

@@ -15,7 +15,6 @@ import arcbasis._cocos.BehaviorInDecomposed;
 import arcbasis._cocos.CheckNoFieldDependencyCycles;
 import arcbasis._cocos.CircularInheritance;
 import arcbasis._cocos.CompArgSideEffectFree;
-import arcbasis._cocos.ComponentHeritageRawType;
 import arcbasis._cocos.ComponentNameCapitalization;
 import arcbasis._cocos.ConfigurationParameterAssignment;
 import arcbasis._cocos.ConnectorDirectionsFit;
@@ -45,11 +44,10 @@ import arcbasis._cocos.PortHeritageTypeFits;
 import arcbasis._cocos.PortNameCapitalization;
 import arcbasis._cocos.PortUniqueSender;
 import arcbasis._cocos.PortsConnected;
+import arcbasis._cocos.QualifiedComponentTypeRawType;
 import arcbasis._cocos.RefinementPortsMatch;
-import arcbasis._cocos.RefinementRawType;
 import arcbasis._cocos.SubPortsConnected;
 import arcbasis._cocos.SubcomponentNameCapitalization;
-import arcbasis._cocos.SubcomponentRawType;
 import arcbasis._cocos.TypeBound;
 import arcbasis._cocos.TypeParameterCapitalization;
 import arcbasis.context.WithinComponentResolver;
@@ -74,6 +72,7 @@ import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
 import de.monticore.statements.mccommonstatements.cocos.ExpressionStatementIsValid;
 import de.monticore.statements.mccommonstatements.cocos.ForConditionHasBooleanType;
 import de.monticore.statements.mccommonstatements.cocos.IfConditionHasBooleanType;
+import de.monticore.types.mcbasictypes.cocos.QualifiedTypeHasNoTypeParameters;
 import de.monticore.statements.mccommonstatements.cocos.SwitchCaseTypesValid;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationInitializationHasCorrectType;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationNameAlreadyDefinedInScope;
@@ -282,9 +281,8 @@ public class MontiArcCoCos {
 
     // ArcBasis Generics CoCos
     checker.addCoCo(new TypeParameterCapitalization());
-    checker.addCoCo(new ComponentHeritageRawType());
-    checker.addCoCo(new SubcomponentRawType());
-    checker.addCoCo(new RefinementRawType());
+    checker.addCoCo(new QualifiedComponentTypeRawType());
+    checker.addCoCo(new QualifiedTypeHasNoTypeParameters());
 
     // VariableArc
     checker.addCoCo(new NoFieldInConstraint());

@@ -44,6 +44,7 @@ public enum MCError implements Error {
   FOR_EACH_EXPR_NOT_ITERABLE(FOR_EACH_EXPR_NOT_ITERABLE_ERROR_CODE, FOR_EACH_EXPR_NOT_ITERABLE_ERROR_MSG),
   FOR_EACH_TYPE_MISMATCH(FOR_EACH_TYPE_MISMATCH_ERROR_CODE, FOR_EACH_TYPE_MISMATCH_ERROR_MSG),
   IF_CONDITION_NOT_BOOLEAN(IfConditionHasBooleanType.ERROR_CODE, IfConditionHasBooleanType.ERROR_MSG_FORMAT),
+  QUALIFIED_TYPE_HAS_NO_TYPE_PARAMETERS("0xFD123", "encountered usage of generic type %s without type arguments. Please provide type arguments for the parameters: %s"),
   UNKNOWN_SUBCOMPONENT_MEMBER("0xF737F", ""),
   VAR_DEC_TYPE_MISMATCH(VarDeclarationInitializationHasCorrectType.ERROR_CODE, VarDeclarationInitializationHasCorrectType.ERROR_MSG_FORMAT),
   VAR_DECLARATION_TYPE_MISMATCH(VarDeclarationInitializationHasCorrectType.ERROR_CODE, VarDeclarationInitializationHasCorrectType.ERROR_MSG_FORMAT),
